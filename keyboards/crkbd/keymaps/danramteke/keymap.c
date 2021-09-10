@@ -146,10 +146,13 @@ static void print_status_narrow(void) {
             oled_write_ln_P(PSTR("Rais"), false);
             break;
         case _LOWER:
-            oled_write_ln_P(PSTR("Lowe"), false);
+            oled_write_ln_P(PSTR("Lowr"), false);
+            break;
+        case _ADJUST:
+            oled_write_ln_P(PSTR("Adj"), false);
             break;
         case _MIRYOKU_FUN:
-            oled_write_ln_P(PSTR("Func"), false);
+            oled_write_ln_P(PSTR("Fun"), false);
             break;
         case _MIRYOKU_NUM:
             oled_write_ln_P(PSTR("Num"), false);
