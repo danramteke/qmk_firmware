@@ -2,21 +2,24 @@
 
 enum danramteke_layers {
     _MIRYOKU_COLEMAK = 0,
-    _MIRYOKU_NAV,
-    _MIRYOKU_NUM,
-    _MIRYOKU_SYM,
-    _MIRYOKU_FUN,
-    _MIRYOKU_MEDIA,
-    _MIRYOKU_MOUSE,
+      _MIRYOKU_NAV,
+      _MIRYOKU_NUM,
+      _MIRYOKU_SYM,
+      _MIRYOKU_FUN,
+      _MIRYOKU_MEDIA,
+      _MIRYOKU_MOUSE,
     _QWERTY,
-    _LOWER,
-    _RAISE,
+      _LOWER,
+      _RAISE,
+      _ADJUST,
+    _SC2,
 };
 
 enum custom_keycodes {
     U_LOWER = SAFE_RANGE,
 
     U_RAISE,
+    U_ADJUST,
     U_PRVWD,
     U_NXTWD,
     U_LSTRT,
@@ -27,65 +30,87 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_MIRYOKU_COLEMAK] = LAYOUT(\
-    XXXXXXX, KC_Q,         KC_W,          KC_F,              KC_P,              KC_B,                                 KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,       KC_VOLU,
+    U_ADJUST, KC_Q,         KC_W,          KC_F,              KC_P,              KC_B,                                 KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,       KC_VOLU,
     XXXXXXX, LGUI_T(KC_A), LALT_T(KC_R),  LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,                                 KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),  KC_VOLD,
     XXXXXXX, KC_Z,         ALGR_T(KC_X),  KC_C,              KC_D,              KC_V,                                 KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,       KC_MUTE,
        LT(_MIRYOKU_MEDIA, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB),      LT(_MIRYOKU_SYM, KC_ENT),   LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL)
   ),
   [_MIRYOKU_NUM] = LAYOUT(
-    XXXXXXX, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______,
     XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
                                       KC_DOT,       KC_0, KC_MINS, XXXXXXX, XXXXXXX, XXXXXXX
   ),
 
   [_MIRYOKU_NAV] = LAYOUT(\
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_AGIN,KC_PASTE, KC_COPY,  KC_CUT, KC_UNDO, _______, \
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_AGIN,KC_PASTE, KC_COPY,  KC_CUT, KC_UNDO, _______, \
     XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                   KC_PGUP, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______, \
     XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_PGDN, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND, _______,  \
                                         XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, KC_BSPC,  KC_DEL
   ),
 
   [_MIRYOKU_SYM] = LAYOUT(
-    XXXXXXX, KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, KC_COLN, KC_DLR,  KC_PERC, KC_CIRC, KC_PLUS,                   XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______,
     XXXXXXX, KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_PIPE,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
                                         KC_LPRN, KC_RPRN, KC_UNDS, XXXXXXX, XXXXXXX, XXXXXXX
   ),
 
   [_MIRYOKU_FUN] = LAYOUT(
-    XXXXXXX, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK,                  XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______,
     XXXXXXX, KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS,                  XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
                                         KC_APP,  KC_SPC,  KC_TAB, XXXXXXX, XXXXXXX, XXXXXXX
   ),
   [_MIRYOKU_MEDIA] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, _______,
     XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                   XXXXXXX, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, _______,
     XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_MSTP, KC_MPLY, KC_MUTE
   ),
 
   [_MIRYOKU_MOUSE] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2,                   KC_AGIN, KC_PASTE,KC_COPY,  KC_CUT, KC_UNDO, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2,                   KC_AGIN, KC_PASTE,KC_COPY,  KC_CUT, KC_UNDO, _______,
     XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_ACL1,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
     XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, XXXXXXX, KC_ACL0,                   XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
   ),
 
-  [_QWERTY] = LAYOUT( \
-  KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                          KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,  KC_BSPC, \
-  KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                          KC_H,     KC_J,    KC_K,    KC_L, KC_SCLN,  KC_QUOT, \
-KC_LCTRL,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                          KC_N,     KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_RSFT, \
-                                    KC_LSFT, KC_SPC, KC_LGUI,     KC_ENT,  U_RAISE,   KC_RALT \
+  [_SC2] = LAYOUT( \
+      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
+      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
+     XXXXXXX,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
+                                      KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI, KC_LOPT
 ),
 
-  [_RAISE] = LAYOUT(
-    _______, KC_LBRC,  KC_7,     KC_8,    KC_9,  KC_RBRC,                     KC_PGUP,  U_PRVWD,   KC_UP,  U_NXTWD,  U_DLINE, _______,
-    _______, KC_SCLN,  KC_4,     KC_5,    KC_6,   KC_EQL,                     KC_PGDN,  KC_LEFT, KC_DOWN,  KC_RGHT,   KC_DEL, XXXXXXX,
-    _______, KC_GRV,   KC_1,     KC_2,    KC_3,  KC_BSLS,                     XXXXXXX,  U_LSTRT, XXXXXXX,   U_LEND,  XXXXXXX, _______,
-                                 KC_0,   KC_DOT, KC_MINS,   _______,  _______, _______
+  [_QWERTY] = LAYOUT( \
+      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
+      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
+     KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
+                                       KC_LGUI,   KC_SPC, U_LOWER, U_RAISE,  KC_ENT, KC_BSPC
+),
+
+
+  [_LOWER] = LAYOUT(
+        KC_0, KC_LBRC,  KC_7,     KC_8,    KC_9,  KC_RBRC,                   KC_PGUP, U_PRVWD,   KC_UP,  U_NXTWD,  U_DLINE, KC_VOLU,
+      KC_DOT, KC_SCLN,  KC_4,     KC_5,    KC_6,   KC_EQL,                   KC_PGDN, KC_LEFT, KC_DOWN,  KC_RGHT,   KC_DEL, KC_VOLD,
+     KC_MINS,  KC_GRV,  KC_1,     KC_2,    KC_3,  KC_BSLS,                   XXXXXXX, U_LSTRT, U_PRVWD,  U_NXTWD,   U_LEND, KC_MUTE,
+                                        _______,  _______, _______, _______, _______, _______
   ),
+
+  [_RAISE] = LAYOUT(
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                    KC_ESC,  KC_ENT,  KC_TAB, XXXXXXX, XXXXXXX, KC_VOLD,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_BSPC,  KC_SPC,  KC_DEL, XXXXXXX, XXXXXXX, KC_MUTE,
+                                        _______, _______, _______, _______, _______, _______
+  ),
+
+  [_ADJUST] = LAYOUT(
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DF(_MIRYOKU_COLEMAK), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DF(_QWERTY),          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DF(_SC2),             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE,
+                                        _______,  _______, _______,    _______, _______, _______
+  )
 };
 
 
@@ -195,15 +220,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case U_LOWER:
             if (record->event.pressed) {
                 layer_on(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             } else {
                 layer_off(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             }
             return false;
         case U_RAISE:
             if (record->event.pressed) {
                 layer_on(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             } else {
                 layer_off(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            }
+            return false;
+        case U_ADJUST:
+            if (record->event.pressed) {
+                layer_on(_ADJUST);
+            } else {
+                layer_off(_ADJUST);
             }
             return false;
         case U_PRVWD:
