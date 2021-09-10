@@ -9,17 +9,24 @@ enum danramteke_layers {
       _MIRYOKU_MEDIA,
       _MIRYOKU_MOUSE,
     _QWERTY,
+    _SC2,
       _LOWER,
       _RAISE,
       _ADJUST,
-    _SC2,
+
 };
 
 enum custom_keycodes {
     U_LOWER = SAFE_RANGE,
-
     U_RAISE,
     U_ADJUST,
+
+
+U_MIRYO,
+U_QWERT,
+U_SC2,
+
+
     U_PRVWD,
     U_NXTWD,
     U_LSTRT,
@@ -76,25 +83,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
   ),
 
-  [_SC2] = LAYOUT( \
-      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
-      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
-     XXXXXXX,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
-                                      KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI, KC_LOPT
-),
-
   [_QWERTY] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
      KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
                                        KC_LGUI,   KC_SPC, U_LOWER, U_RAISE,  KC_ENT, KC_BSPC
-),
+  ),
 
+  [_SC2] = LAYOUT( \
+      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
+      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
+      KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
+                                      KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI, KC_LOPT
+  ),
 
   [_LOWER] = LAYOUT(
-        KC_0, KC_LBRC,  KC_7,     KC_8,    KC_9,  KC_RBRC,                   KC_PGUP, U_PRVWD,   KC_UP,  U_NXTWD,  U_DLINE, KC_VOLU,
-      KC_DOT, KC_SCLN,  KC_4,     KC_5,    KC_6,   KC_EQL,                   KC_PGDN, KC_LEFT, KC_DOWN,  KC_RGHT,   KC_DEL, KC_VOLD,
-     KC_MINS,  KC_GRV,  KC_1,     KC_2,    KC_3,  KC_BSLS,                   XXXXXXX, U_LSTRT, U_PRVWD,  U_NXTWD,   U_LEND, KC_MUTE,
+        KC_0, KC_LBRC,  KC_7,     KC_8,    KC_9,  KC_RBRC,                   KC_AGIN,KC_PASTE, KC_COPY,  KC_CUT, KC_UNDO, KC_VOLU,
+      KC_DOT, KC_SCLN,  KC_4,     KC_5,    KC_6,   KC_EQL,                   KC_PGUP, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, KC_VOLD,
+     KC_MINS,  KC_GRV,  KC_1,     KC_2,    KC_3,  KC_BSLS,                   KC_PGDN, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND, KC_MUTE,
                                         _______,  _______, _______, _______, _______, _______
   ),
 
@@ -106,10 +112,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_ADJUST] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DF(_MIRYOKU_COLEMAK), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DF(_QWERTY),          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DF(_SC2),             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE,
-                                        _______,  _______, _______,    _______, _______, _______
+    XXXXXXX, CG_TOGG, XXXXXXX, XXXXXXX, XXXXXXX, U_MIRYO,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, U_QWERT,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   U_SC2,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE,
+                                        _______, _______, _______, _______, _______, _______
   )
 };
 
@@ -121,17 +127,18 @@ static void print_status_narrow(void) {
     // Print current mode
     oled_write_ln_P(PSTR("MODE"), false);
     switch (get_highest_layer(default_layer_state)) {
+        case _MIRYOKU_COLEMAK:
+            oled_write_ln_P(PSTR("Mir"), false);
+            break;
         case _QWERTY:
             oled_write_ln_P(PSTR("Qwrt"), false);
             break;
         case _SC2:
             oled_write_ln_P(PSTR("Sc2"), false);
             break;
-        case _MIRYOKU_COLEMAK:
-            oled_write_ln_P(PSTR("Mir"), false);
-            break;
         default:
             oled_write_ln_P(PSTR("???"), false);
+            break;
     }
     oled_write_P(PSTR("\n\n"), false);
     // Print current layer
@@ -171,6 +178,7 @@ static void print_status_narrow(void) {
             break;
         default:
             oled_write_ln_P(PSTR("???"), false);
+            break;
     }
     // oled_write_P(PSTR("\n\n"), false);
     // led_t led_usb_state = host_keyboard_led_state();
@@ -223,6 +231,21 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case U_MIRYO:
+            set_single_persistent_default_layer(_MIRYOKU_COLEMAK);
+            layer_move(_MIRYOKU_COLEMAK);
+            return false;
+        case U_QWERT:
+            set_single_persistent_default_layer(_QWERTY);
+            layer_move(_QWERTY);
+            return false;
+        case U_SC2:
+            set_single_persistent_default_layer(_SC2);
+            layer_move(_SC2);
+            return false;
+
+
+
         case U_LOWER:
             if (record->event.pressed) {
                 layer_on(_LOWER);
@@ -248,6 +271,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 layer_off(_ADJUST);
             }
             return false;
+
+
+
         case U_PRVWD:
             if (record->event.pressed) {
                 if (keymap_config.swap_lctl_lgui) {
