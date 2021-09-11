@@ -9,7 +9,7 @@ enum danramteke_layers {
       _MIRYOKU_MEDIA,
       _MIRYOKU_MOUSE,
     _QWERTY,
-    _SC2,
+    _GAMING,
       _LOWER,
       _RAISE,
       _ADJUST,
@@ -23,8 +23,8 @@ enum custom_keycodes {
 
 
 U_MIRYO,
-U_QWERT,
-U_SC2,
+U_QWERTY,
+U_GAMING,
 
 
     U_PRVWD,
@@ -87,10 +87,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
      KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
-                                      KC_LCTRL,   KC_SPC, U_LOWER, U_RAISE,  KC_ENT, KC_BSPC
+                                      KC_LCTRL,   KC_SPC, U_LOWER, U_RAISE,  KC_ENT, KC_LOPT
   ),
 
-  [_SC2] = LAYOUT( \
+  [_GAMING] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
       KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
@@ -113,8 +113,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_ADJUST] = LAYOUT(
     XXXXXXX, CG_TOGG, XXXXXXX, XXXXXXX, XXXXXXX, U_MIRYO,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, U_QWERT,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   U_SC2,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,U_QWERTY,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,U_GAMING,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE,
                                         _______, _______, _______, _______, _______, _______
   )
 };
@@ -129,53 +129,78 @@ static void print_status_narrow(void) {
     switch (get_highest_layer(default_layer_state)) {
         case _MIRYOKU_COLEMAK:
             oled_write_P(PSTR("Miroyoku - "), false);
+            switch (get_highest_layer(layer_state)) {
+                case _MIRYOKU_COLEMAK:
+                    oled_write_ln_P(PSTR("Base  "), false);
+                    break;
+                case _ADJUST:
+                    oled_write_ln_P(PSTR("Adjust"), false);
+                    break;
+                case _MIRYOKU_FUN:
+                    oled_write_ln_P(PSTR("Fun  "), false);
+                    break;
+                case _MIRYOKU_NUM:
+                    oled_write_ln_P(PSTR("Num  "), false);
+                    break;
+                case _MIRYOKU_SYM:
+                    oled_write_ln_P(PSTR("Sym  "), false);
+                    break;
+                case _MIRYOKU_NAV:
+                    oled_write_ln_P(PSTR("Nav  "), false);
+                    break;
+                case _MIRYOKU_MEDIA:
+                    oled_write_ln_P(PSTR("Media"), false);
+                    break;
+                case _MIRYOKU_MOUSE:
+                    oled_write_ln_P(PSTR("Mouse"), false);
+                    break;
+                default:
+                    oled_write_ln_P(PSTR("? ? ?"), false);
+                    break;
+            }
             break;
         case _QWERTY:
-            oled_write_P(PSTR("Qwerty   - "), false);
+            oled_write_P(PSTR("Qwerty - "), false);
+                switch (get_highest_layer(layer_state)) {
+                    case _QWERTY:
+                        oled_write_ln_P(PSTR("Base  "), false);
+                        break;
+                    case _RAISE:
+                        oled_write_ln_P(PSTR("Raise "), false);
+                        break;
+                    case _LOWER:
+                        oled_write_ln_P(PSTR("Lower "), false);
+                        break;
+                    case _ADJUST:
+                        oled_write_ln_P(PSTR("Adjust"), false);
+                        break;
+                    default:
+                        oled_write_ln_P(PSTR("? ? ?"), false);
+                        break;
+                }
             break;
-        case _SC2:
-            oled_write_P(PSTR("     Sc2 - "), false);
+        case _GAMING:
+            oled_write_P(PSTR("Gaming - "), false);
+                switch (get_highest_layer(layer_state)) {
+                    case _GAMING:
+                        oled_write_ln_P(PSTR("Base  "), false);
+                        break;
+                    case _RAISE:
+                        oled_write_ln_P(PSTR("Raise "), false);
+                        break;
+                    case _LOWER:
+                        oled_write_ln_P(PSTR("Lower "), false);
+                        break;
+                    case _ADJUST:
+                        oled_write_ln_P(PSTR("Adjust"), false);
+                        break;
+                    default:
+                        oled_write_ln_P(PSTR("? ? ?"), false);
+                        break;
+                }
             break;
         default:
             oled_write_P(PSTR(" ?  ?  ? - "), false);
-            break;
-    }
-
-    switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
-        case _SC2:
-        case _MIRYOKU_COLEMAK:
-            oled_write_ln_P(PSTR("Base  "), false);
-            break;
-        case _RAISE:
-            oled_write_ln_P(PSTR("Raise "), false);
-            break;
-        case _LOWER:
-            oled_write_ln_P(PSTR("Lower "), false);
-            break;
-        case _ADJUST:
-            oled_write_ln_P(PSTR("Adjust"), false);
-            break;
-        case _MIRYOKU_FUN:
-            oled_write_ln_P(PSTR("Fun  "), false);
-            break;
-        case _MIRYOKU_NUM:
-            oled_write_ln_P(PSTR("Num  "), false);
-            break;
-        case _MIRYOKU_SYM:
-            oled_write_ln_P(PSTR("Sym  "), false);
-            break;
-        case _MIRYOKU_NAV:
-            oled_write_ln_P(PSTR("Nav  "), false);
-            break;
-        case _MIRYOKU_MEDIA:
-            oled_write_ln_P(PSTR("Media"), false);
-            break;
-        case _MIRYOKU_MOUSE:
-            oled_write_ln_P(PSTR("Mouse"), false);
-            break;
-        default:
-            oled_write_ln_P(PSTR("? ? ?"), false);
             break;
     }
 
@@ -185,8 +210,6 @@ static void print_status_narrow(void) {
     } else {
         oled_write_ln_P(PSTR("Win"), false);
     }
-
-
 
 }
 
@@ -229,13 +252,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             set_single_persistent_default_layer(_MIRYOKU_COLEMAK);
             layer_move(_MIRYOKU_COLEMAK);
             return false;
-        case U_QWERT:
+        case U_QWERTY:
             set_single_persistent_default_layer(_QWERTY);
             layer_move(_QWERTY);
             return false;
-        case U_SC2:
-            set_single_persistent_default_layer(_SC2);
-            layer_move(_SC2);
+        case U_GAMING:
+            set_single_persistent_default_layer(_GAMING);
+            layer_move(_GAMING);
             return false;
 
 
