@@ -87,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU, \
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD, \
      KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE, \
-                                       KC_LGUI,   KC_SPC, U_LOWER, U_RAISE,  KC_ENT, KC_BSPC
+                                      KC_LCTRL,   KC_SPC, U_LOWER, U_RAISE,  KC_ENT, KC_BSPC
   ),
 
   [_SC2] = LAYOUT( \
@@ -125,78 +125,72 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 static void print_status_narrow(void) {
     // Print current mode
-    oled_write_ln_P(PSTR("MODE"), false);
+
     switch (get_highest_layer(default_layer_state)) {
         case _MIRYOKU_COLEMAK:
-            oled_write_ln_P(PSTR("Mir"), false);
+            oled_write_P(PSTR("Miroyoku - "), false);
             break;
         case _QWERTY:
-            oled_write_ln_P(PSTR("Qwrt"), false);
+            oled_write_P(PSTR("Qwerty   - "), false);
             break;
         case _SC2:
-            oled_write_ln_P(PSTR("Sc2"), false);
+            oled_write_P(PSTR("     Sc2 - "), false);
             break;
         default:
-            oled_write_ln_P(PSTR("???"), false);
+            oled_write_P(PSTR(" ?  ?  ? - "), false);
             break;
     }
-    oled_write_P(PSTR("\n\n"), false);
-    // Print current layer
-    oled_write_ln_P(PSTR("LAYR"), false);
+
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
         case _SC2:
         case _MIRYOKU_COLEMAK:
-            oled_write_ln_P(PSTR("Base"), false);
+            oled_write_ln_P(PSTR("Base  "), false);
             break;
         case _RAISE:
-            oled_write_ln_P(PSTR("Rais"), false);
+            oled_write_ln_P(PSTR("Raise "), false);
             break;
         case _LOWER:
-            oled_write_ln_P(PSTR("Lowr"), false);
+            oled_write_ln_P(PSTR("Lower "), false);
             break;
         case _ADJUST:
-            oled_write_ln_P(PSTR("Adj"), false);
+            oled_write_ln_P(PSTR("Adjust"), false);
             break;
         case _MIRYOKU_FUN:
-            oled_write_ln_P(PSTR("Fun"), false);
+            oled_write_ln_P(PSTR("Fun  "), false);
             break;
         case _MIRYOKU_NUM:
-            oled_write_ln_P(PSTR("Num"), false);
+            oled_write_ln_P(PSTR("Num  "), false);
             break;
         case _MIRYOKU_SYM:
-            oled_write_ln_P(PSTR("Sym"), false);
+            oled_write_ln_P(PSTR("Sym  "), false);
             break;
         case _MIRYOKU_NAV:
-            oled_write_ln_P(PSTR("Nav"), false);
+            oled_write_ln_P(PSTR("Nav  "), false);
             break;
         case _MIRYOKU_MEDIA:
-            oled_write_ln_P(PSTR("Mdia"), false);
+            oled_write_ln_P(PSTR("Media"), false);
             break;
         case _MIRYOKU_MOUSE:
-            oled_write_ln_P(PSTR("Mous"), false);
+            oled_write_ln_P(PSTR("Mouse"), false);
             break;
         default:
-            oled_write_ln_P(PSTR("???"), false);
+            oled_write_ln_P(PSTR("? ? ?"), false);
             break;
     }
-    // oled_write_P(PSTR("\n\n"), false);
-    // led_t led_usb_state = host_keyboard_led_state();
-    // oled_write_ln_P(PSTR("Cap?"), led_usb_state.caps_lock);
 
-    oled_write_P(PSTR("\n\n"), false);
-    oled_write_ln_P(PSTR("OS"), false);
+  oled_write_ln_P(PSTR(""), false);
     if (keymap_config.swap_lctl_lgui) {
         oled_write_ln_P(PSTR("Mac"), false);
     } else {
         oled_write_ln_P(PSTR("Win"), false);
     }
+
+
+
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    if (is_keyboard_master()) {
-        return OLED_ROTATION_270;
-    }
     return rotation;
 }
 
