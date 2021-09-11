@@ -8,8 +8,10 @@ enum danramteke_layers {
       _MIRYOKU_FUN,
       _MIRYOKU_MEDIA,
       _MIRYOKU_MOUSE,
-    _QWERTY,
+
     _GAMING,
+    _QWERTY,
+
       _LOWER,
       _RAISE,
       _ADJUST,
@@ -22,10 +24,9 @@ enum custom_keycodes {
     U_ADJUST,
 
 
-U_MIRYO,
-U_QWERTY,
-U_GAMING,
-
+    U_MIRYO,
+    U_GAMING,
+    U_QWERTY,
 
     U_PRVWD,
     U_NXTWD,
@@ -37,9 +38,9 @@ U_GAMING,
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_MIRYOKU_COLEMAK] = LAYOUT(\
-    U_ADJUST, KC_Q,         KC_W,          KC_F,              KC_P,              KC_B,                                 KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,       KC_VOLU,
-    XXXXXXX, LGUI_T(KC_A), LALT_T(KC_R),  LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,                                 KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),  KC_VOLD,
-    XXXXXXX, KC_Z,         ALGR_T(KC_X),  KC_C,              KC_D,              KC_V,                                 KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,       KC_MUTE,
+    U_ADJUST, KC_Q,         KC_W,          KC_F,              KC_P,              KC_B,                                 KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,       KC_MUTE,
+    XXXXXXX, LGUI_T(KC_A), LALT_T(KC_R),  LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,                                 KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),  KC_VOLU,
+    XXXXXXX, KC_Z,         ALGR_T(KC_X),  KC_C,              KC_D,              KC_V,                                 KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,       KC_VOLD,
        LT(_MIRYOKU_MEDIA, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB),      LT(_MIRYOKU_SYM, KC_ENT),   LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL)
   ),
   [_MIRYOKU_NUM] = LAYOUT(
@@ -83,17 +84,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
   ),
 
-  [_QWERTY] = LAYOUT( \
-      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU,
-      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD,
-     KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE,
+  [_GAMING] = LAYOUT( \
+      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
+      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
+     KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
                                       KC_LCTRL,   KC_SPC, U_LOWER, U_RAISE,  KC_ENT, KC_LOPT
   ),
 
-  [_GAMING] = LAYOUT( \
-      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_VOLU,
-      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLD,
-      KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_MUTE,
+  [_QWERTY] = LAYOUT( \
+      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
+      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
+      KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
                                       KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI, KC_LOPT
   ),
 
