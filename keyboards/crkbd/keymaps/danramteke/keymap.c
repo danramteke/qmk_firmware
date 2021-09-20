@@ -14,7 +14,7 @@ enum danramteke_layers {
 
       _LOWER,
       _RAISE,
-      _ADJUST,
+    _ADJUST,
 
 };
 
