@@ -138,13 +138,14 @@ void print_status_primary(void) {
 
     switch (get_highest_layer(default_layer_state)) {
         case _MIRYOKU_COLEMAK:
-            oled_write_P(PSTR("Miroyoku - "), false);
+            oled_write_ln_P(PSTR("Mryku"), false);
+
             switch (get_highest_layer(layer_state)) {
                 case _MIRYOKU_COLEMAK:
-                    oled_write_ln_P(PSTR("Base  "), false);
+                    oled_write_ln_P(PSTR("Base "), false);
                     break;
                 case _ADJUST:
-                    oled_write_ln_P(PSTR("Adjust"), false);
+                    oled_write_ln_P(PSTR("Adjst"), false);
                     break;
                 case _MIRYOKU_FUN:
                     oled_write_ln_P(PSTR("Fun  "), false);
@@ -170,19 +171,20 @@ void print_status_primary(void) {
             }
             break;
         case _QWERTY:
-            oled_write_P(PSTR("Qwerty - "), false);
+            oled_write_ln_P(PSTR("Qwert"), false);
+
                 switch (get_highest_layer(layer_state)) {
                     case _QWERTY:
-                        oled_write_ln_P(PSTR("Base  "), false);
+                        oled_write_ln_P(PSTR("Base "), false);
                         break;
                     case _RAISE:
-                        oled_write_ln_P(PSTR("Raise "), false);
+                        oled_write_ln_P(PSTR("Raise"), false);
                         break;
                     case _LOWER:
-                        oled_write_ln_P(PSTR("Lower "), false);
+                        oled_write_ln_P(PSTR("Lower"), false);
                         break;
                     case _ADJUST:
-                        oled_write_ln_P(PSTR("Adjust"), false);
+                        oled_write_ln_P(PSTR("Adjst"), false);
                         break;
                     default:
                         oled_write_ln_P(PSTR("? ? ?"), false);
@@ -190,19 +192,20 @@ void print_status_primary(void) {
                 }
             break;
         case _GAME1:
-            oled_write_P(PSTR("Game 1 - "), false);
+            oled_write_ln_P(PSTR("Game1"), false);
+
                 switch (get_highest_layer(layer_state)) {
                     case _GAME1:
-                        oled_write_ln_P(PSTR("Base  "), false);
+                        oled_write_ln_P(PSTR("Base "), false);
                         break;
                     case _RAISE:
-                        oled_write_ln_P(PSTR("Raise "), false);
+                        oled_write_ln_P(PSTR("Raise"), false);
                         break;
                     case _LOWER:
-                        oled_write_ln_P(PSTR("Lower "), false);
+                        oled_write_ln_P(PSTR("Lower"), false);
                         break;
                     case _ADJUST:
-                        oled_write_ln_P(PSTR("Adjust"), false);
+                        oled_write_ln_P(PSTR("Adjst"), false);
                         break;
                     default:
                         oled_write_ln_P(PSTR("? ? ?"), false);
@@ -210,19 +213,20 @@ void print_status_primary(void) {
                 }
             break;
         case _GAME2:
-            oled_write_P(PSTR("Game 2 - "), false);
+            oled_write_ln_P(PSTR("Game2"), false);
+
                 switch (get_highest_layer(layer_state)) {
-                    case _GAME1:
-                        oled_write_ln_P(PSTR("Base  "), false);
+                    case _GAME2:
+                        oled_write_ln_P(PSTR("Base "), false);
                         break;
                     case _RAISE:
-                        oled_write_ln_P(PSTR("Raise "), false);
+                        oled_write_ln_P(PSTR("Raise"), false);
                         break;
                     case _LOWER:
-                        oled_write_ln_P(PSTR("Lower "), false);
+                        oled_write_ln_P(PSTR("Lower"), false);
                         break;
                     case _ADJUST:
-                        oled_write_ln_P(PSTR("Adjust"), false);
+                        oled_write_ln_P(PSTR("Adjst"), false);
                         break;
                     default:
                         oled_write_ln_P(PSTR("? ? ?"), false);
@@ -230,55 +234,47 @@ void print_status_primary(void) {
                 }
             break;
         default:
-            oled_write_P(PSTR(" ?  ?  ? - "), false);
+            oled_write_ln_P(PSTR(" ?  ?  ?"), true);
+            oled_write_ln_P(PSTR(""), false);
             break;
     }
 
-  oled_write_ln_P(PSTR(""), false);
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_ln_P(PSTR("Mac"), false);
-    } else {
-        oled_write_ln_P(PSTR("Win"), false);
-    }
-
-}
-
-void print_status_secondary(void) {
 
     uint8_t modifiers = get_mods();
 
-    if ((modifiers & MOD_MASK_SHIFT)) {
-        oled_write_ln_P(PSTR("Shft "), false);
+    oled_write_ln_P(PSTR(" S "), (modifiers & MOD_MASK_SHIFT));
+
+    if (keymap_config.swap_lctl_lgui) {
+        oled_write_ln_P(PSTR(" G "), (modifiers & MOD_MASK_GUI));
     } else {
-        oled_write_ln_P(PSTR("  -  "), false);
+        oled_write_ln_P(PSTR(" C "), (modifiers & MOD_MASK_CTRL));
     }
 
-    if (modifiers & MOD_MASK_GUI) {
-        oled_write_ln_P(PSTR("Cmd  "), false);
+    oled_write_ln_P(PSTR(" A "), (modifiers & MOD_MASK_ALT));
+
+    if (keymap_config.swap_lctl_lgui) {
+        oled_write_ln_P(PSTR(" C "), (modifiers & MOD_MASK_CTRL));
     } else {
-        oled_write_ln_P(PSTR("  -  "), false);
+        oled_write_ln_P(PSTR(" G "), (modifiers & MOD_MASK_GUI));
     }
 
-    if (modifiers & MOD_MASK_ALT) {
-        oled_write_ln_P(PSTR("Alt  "), false);
-    } else {
-        oled_write_ln_P(PSTR("  -  "), false);
-    }
+    oled_write_ln_P(PSTR(""), false);
 
-    if (modifiers & MOD_MASK_CTRL) {
-        oled_write_ln_P(PSTR("Ctrl "), false);
-    } else {
-        oled_write_ln_P(PSTR("  -  "), false);
-    }
+    oled_write_ln_P(host_keyboard_led_state().caps_lock
+    ? PSTR("ABC")
+    : PSTR("abc"), host_keyboard_led_state().caps_lock);
 
-    oled_write_ln_P(host_keyboard_led_state().caps_lock?PSTR("ABC"):PSTR("abc"), host_keyboard_led_state().caps_lock);
+    oled_write_ln_P(PSTR(""), false);
+    if (keymap_config.swap_lctl_lgui) {
+        oled_write_P(PSTR("Mac"), false);
+    } else {
+        oled_write_P(PSTR("Win"), false);
+    }
 }
 
-
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-
     if (is_keyboard_left()) {
-        return rotation;
+        return OLED_ROTATION_270;
     } else {
         return OLED_ROTATION_270;
     }
@@ -298,7 +294,7 @@ void oled_task_user(void) {
     if (is_keyboard_left()) {
         print_status_primary();
     } else {
-        print_status_secondary();
+        oled_render_logo();
     }
 }
 
