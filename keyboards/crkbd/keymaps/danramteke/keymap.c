@@ -9,7 +9,8 @@ enum danramteke_layers {
       _MIRYOKU_MEDIA,
       _MIRYOKU_MOUSE,
 
-    _GAMING,
+    _GAME1,
+    _GAME2,
     _QWERTY,
 
       _LOWER,
@@ -25,7 +26,8 @@ enum custom_keycodes {
 
 
     U_MIRYO,
-    U_GAMING,
+    U_GAME1,
+    U_GAME2,
     U_QWERTY,
 
     U_PRVWD,
@@ -84,18 +86,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
   ),
 
-  [_GAMING] = LAYOUT( \
+  [_GAME1] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
      KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
-                                      KC_LCTRL,   KC_SPC, U_LOWER, U_RAISE,  KC_1, KC_LOPT
+                                        KC_ESC,   KC_SPC, U_LOWER, U_RAISE,    KC_0,  KC_ENT
+  ),
+
+  [_GAME2] = LAYOUT( \
+      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
+      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
+     KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
+                                        KC_ESC,     KC_0, U_LOWER, U_RAISE,  KC_SPC,  KC_ENT
   ),
 
   [_QWERTY] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
       KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
-                                      KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI, KC_LOPT
+                                      KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI,  KC_ENT
   ),
 
   [_LOWER] = LAYOUT(
@@ -113,9 +122,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_ADJUST] = LAYOUT(
-    XXXXXXX, CG_TOGG, XXXXXXX, XXXXXXX, XXXXXXX, U_MIRYO,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,U_QWERTY,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,U_GAMING,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, CG_SWAP, CG_NORM, CG_TOGG, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, U_GAME1,U_QWERTY, U_MIRYO, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, U_GAME2, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                         _______, _______, _______, _______, _______, _______
   )
 };
@@ -124,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #ifdef OLED_ENABLE
 
-static void print_status_narrow(void) {
+void print_status_primary(void) {
     // Print current mode
 
     switch (get_highest_layer(default_layer_state)) {
@@ -180,10 +189,30 @@ static void print_status_narrow(void) {
                         break;
                 }
             break;
-        case _GAMING:
-            oled_write_P(PSTR("Gaming - "), false);
+        case _GAME1:
+            oled_write_P(PSTR("Game 1 - "), false);
                 switch (get_highest_layer(layer_state)) {
-                    case _GAMING:
+                    case _GAME1:
+                        oled_write_ln_P(PSTR("Base  "), false);
+                        break;
+                    case _RAISE:
+                        oled_write_ln_P(PSTR("Raise "), false);
+                        break;
+                    case _LOWER:
+                        oled_write_ln_P(PSTR("Lower "), false);
+                        break;
+                    case _ADJUST:
+                        oled_write_ln_P(PSTR("Adjust"), false);
+                        break;
+                    default:
+                        oled_write_ln_P(PSTR("? ? ?"), false);
+                        break;
+                }
+            break;
+        case _GAME2:
+            oled_write_P(PSTR("Game 2 - "), false);
+                switch (get_highest_layer(layer_state)) {
+                    case _GAME1:
                         oled_write_ln_P(PSTR("Base  "), false);
                         break;
                     case _RAISE:
@@ -214,8 +243,52 @@ static void print_status_narrow(void) {
 
 }
 
+void print_status_secondary(void) {
+
+    uint8_t modifiers = get_mods();
+        // oled_write_ln(PSTR("Mods:"), false);
+    // oled_write(PSTR("S"), (modifiers & MOD_MASK_SHIFT));
+    // oled_write(PSTR("C"), (modifiers & MOD_MASK_CTRL));
+    // oled_write(PSTR("A"), (modifiers & MOD_MASK_ALT));
+    // oled_write_ln(PSTR("G"), (modifiers & MOD_MASK_GUI));
+    // oled_write_ln(PSTR(" "), false);
+    // oled_write_ln_P(PSTR("hello "), false);
+
+    if ((modifiers & MOD_MASK_SHIFT)) {
+        oled_write_ln_P(PSTR("Shft "), false);
+    } else {
+        oled_write_ln_P(PSTR("  -  "), false);
+    }
+
+    if (modifiers & MOD_MASK_GUI) {
+        oled_write_ln_P(PSTR("Cmd  "), false);
+    } else {
+        oled_write_ln_P(PSTR("  -  "), false);
+    }
+
+    if (modifiers & MOD_MASK_ALT) {
+        oled_write_ln_P(PSTR("Alt  "), false);
+    } else {
+        oled_write_ln_P(PSTR("  -  "), false);
+    }
+
+    if (modifiers & MOD_MASK_CTRL) {
+        oled_write_ln_P(PSTR("Ctrl "), false);
+    } else {
+        oled_write_ln_P(PSTR("  -  "), false);
+    }
+// oled_write_ln_P(PSTR("Zzz "), false);
+    oled_write_ln_P(host_keyboard_led_state().caps_lock?PSTR("ABC"):PSTR("abc"), host_keyboard_led_state().caps_lock);
+}
+
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    return rotation;
+
+    if (is_keyboard_master()) {
+        return rotation;
+    } else {
+        return OLED_ROTATION_270;
+    }
 }
 
 
@@ -230,9 +303,9 @@ void oled_render_logo(void) {
 
 void oled_task_user(void) {
     if (is_keyboard_master()) {
-        print_status_narrow();
+        print_status_primary();
     } else {
-        oled_render_logo();
+        print_status_secondary();
     }
 }
 
@@ -249,19 +322,26 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+
         case U_MIRYO:
             set_single_persistent_default_layer(_MIRYOKU_COLEMAK);
             layer_move(_MIRYOKU_COLEMAK);
             return false;
+
         case U_QWERTY:
             set_single_persistent_default_layer(_QWERTY);
             layer_move(_QWERTY);
             return false;
-        case U_GAMING:
-            set_single_persistent_default_layer(_GAMING);
-            layer_move(_GAMING);
+
+        case U_GAME1:
+            set_single_persistent_default_layer(_GAME1);
+            layer_move(_GAME1);
             return false;
 
+        case U_GAME2:
+            set_single_persistent_default_layer(_GAME2);
+            layer_move(_GAME2);
+            return false;
 
 
         case U_LOWER:
