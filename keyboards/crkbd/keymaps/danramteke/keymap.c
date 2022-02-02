@@ -284,7 +284,7 @@ void print_status_secondary(void) {
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
-    if (is_keyboard_master()) {
+    if (is_keyboard_left()) {
         return rotation;
     } else {
         return OLED_ROTATION_270;
@@ -302,7 +302,7 @@ void oled_render_logo(void) {
 }
 
 void oled_task_user(void) {
-    if (is_keyboard_master()) {
+    if (is_keyboard_left()) {
         print_status_primary();
     } else {
         print_status_secondary();
