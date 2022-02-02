@@ -246,13 +246,6 @@ void print_status_primary(void) {
 void print_status_secondary(void) {
 
     uint8_t modifiers = get_mods();
-        // oled_write_ln(PSTR("Mods:"), false);
-    // oled_write(PSTR("S"), (modifiers & MOD_MASK_SHIFT));
-    // oled_write(PSTR("C"), (modifiers & MOD_MASK_CTRL));
-    // oled_write(PSTR("A"), (modifiers & MOD_MASK_ALT));
-    // oled_write_ln(PSTR("G"), (modifiers & MOD_MASK_GUI));
-    // oled_write_ln(PSTR(" "), false);
-    // oled_write_ln_P(PSTR("hello "), false);
 
     if ((modifiers & MOD_MASK_SHIFT)) {
         oled_write_ln_P(PSTR("Shft "), false);
@@ -277,7 +270,7 @@ void print_status_secondary(void) {
     } else {
         oled_write_ln_P(PSTR("  -  "), false);
     }
-// oled_write_ln_P(PSTR("Zzz "), false);
+
     oled_write_ln_P(host_keyboard_led_state().caps_lock?PSTR("ABC"):PSTR("abc"), host_keyboard_led_state().caps_lock);
 }
 
