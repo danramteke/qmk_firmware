@@ -8,10 +8,12 @@ enum danramteke_layers {
       _MIRYOKU_FUN,
       _MIRYOKU_MEDIA,
       _MIRYOKU_MOUSE,
+      _MIRYOKU_BRACKETS,
 
     _GAME1,
     _GAME2,
     _QWERTY,
+    _COLMK,
 
       _LOWER,
       _RAISE,
@@ -22,13 +24,12 @@ enum danramteke_layers {
 enum custom_keycodes {
     U_LOWER = SAFE_RANGE,
     U_RAISE,
-    U_ADJUST,
-
 
     U_MIRYO,
     U_GAME1,
     U_GAME2,
     U_QWERTY,
+    U_COLMK,
 
     U_PRVWD,
     U_NXTWD,
@@ -40,9 +41,9 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_MIRYOKU_COLEMAK] = LAYOUT(\
-    U_ADJUST, KC_Q,         KC_W,          KC_F,              KC_P,              KC_B,                                 KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,       KC_MUTE,
+    MO(_ADJUST), KC_Q,         KC_W,          KC_F,              KC_P,              KC_B,                                 KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,       KC_MUTE,
     XXXXXXX, LGUI_T(KC_A), LALT_T(KC_R),  LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,                                 KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),  KC_VOLU,
-    XXXXXXX, KC_Z,         ALGR_T(KC_X),  KC_C,              KC_D,              KC_V,                                 KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,       KC_VOLD,
+    MO(_MIRYOKU_BRACKETS), KC_Z,         ALGR_T(KC_X),  KC_C,              KC_D,              KC_V,                                 KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,       KC_VOLD,
        LT(_MIRYOKU_MEDIA, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB),      LT(_MIRYOKU_SYM, KC_ENT),   LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL)
   ),
   [_MIRYOKU_NUM] = LAYOUT(
@@ -86,6 +87,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
   ),
 
+  [_MIRYOKU_BRACKETS] = LAYOUT(
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_LBRC, XXXXXXX, KC_RBRC, XXXXXXX, _______,
+    XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                   KC_LCBR, KC_LPRN, XXXXXXX, KC_RPRN, KC_RCBR, _______,
+    XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_LABK, XXXXXXX, KC_RABK, XXXXXXX, _______,
+                                        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+  ),
+
+
   [_GAME1] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
@@ -107,6 +116,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI,  KC_ENT
   ),
 
+  [_COLMK] = LAYOUT( \
+      KC_ESC,   KC_Q,   KC_W,    KC_F,    KC_P,     KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_MUTE,
+      KC_TAB,   KC_A,   KC_R,    KC_S,    KC_T,     KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O,  KC_VOLU,
+      KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_D,     KC_D,                      KC_H,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
+                                      KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI,  KC_ENT
+  ),
+
   [_LOWER] = LAYOUT(
         KC_0, KC_LBRC,  KC_7,    KC_8,    KC_9,  KC_RBRC,                   KC_AGIN,KC_PASTE, KC_COPY,  KC_CUT, KC_UNDO, _______,
       KC_DOT, KC_SCLN,  KC_4,    KC_5,    KC_6,   KC_EQL,                   KC_PGUP, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______,
@@ -124,7 +140,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_ADJUST] = LAYOUT(
     XXXXXXX, CG_SWAP, CG_NORM, CG_TOGG, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, U_GAME1,U_QWERTY, U_MIRYO, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    XXXXXXX, U_GAME2, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, U_GAME2, XXXXXXX, U_COLMK, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                         _______, _______, _______, _______, _______, _______
   )
 };
@@ -165,6 +181,9 @@ void print_status_primary(void) {
                 case _MIRYOKU_MOUSE:
                     oled_write_ln_P(PSTR("Mouse"), false);
                     break;
+                case _MIRYOKU_BRACKETS:
+                    oled_write_ln_P(PSTR("Brkts"), false);
+                    break;
                 default:
                     oled_write_ln_P(PSTR("? ? ?"), false);
                     break;
@@ -172,6 +191,27 @@ void print_status_primary(void) {
             break;
         case _QWERTY:
             oled_write_ln_P(PSTR("Qwert"), false);
+
+                switch (get_highest_layer(layer_state)) {
+                    case _QWERTY:
+                        oled_write_ln_P(PSTR("Base "), false);
+                        break;
+                    case _RAISE:
+                        oled_write_ln_P(PSTR("Raise"), false);
+                        break;
+                    case _LOWER:
+                        oled_write_ln_P(PSTR("Lower"), false);
+                        break;
+                    case _ADJUST:
+                        oled_write_ln_P(PSTR("Adjst"), false);
+                        break;
+                    default:
+                        oled_write_ln_P(PSTR("? ? ?"), false);
+                        break;
+                }
+            break;
+        case _COLMK:
+            oled_write_ln_P(PSTR("Colmk"), false);
 
                 switch (get_highest_layer(layer_state)) {
                     case _QWERTY:
@@ -351,15 +391,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
             }
             return false;
-        case U_ADJUST:
-            if (record->event.pressed) {
-                layer_on(_ADJUST);
-            } else {
-                layer_off(_ADJUST);
-            }
-            return false;
-
-
 
         case U_PRVWD:
             if (record->event.pressed) {
