@@ -282,22 +282,22 @@ void print_status_primary(void) {
 
     uint8_t modifiers = get_mods();
 
-    oled_write_ln_P(PSTR(" S "), (modifiers & MOD_MASK_SHIFT));
+    oled_write_P(PSTR("S"), (modifiers & MOD_MASK_SHIFT));
 
     if (keymap_config.swap_lctl_lgui) {
-        oled_write_ln_P(PSTR(" G "), (modifiers & MOD_MASK_GUI));
+        oled_write_P(PSTR("G"), (modifiers & MOD_MASK_GUI));
     } else {
-        oled_write_ln_P(PSTR(" C "), (modifiers & MOD_MASK_CTRL));
+        oled_write_P(PSTR("C"), (modifiers & MOD_MASK_CTRL));
     }
 
-    oled_write_ln_P(PSTR(" A "), (modifiers & MOD_MASK_ALT));
+    oled_write_P(PSTR("A"), (modifiers & MOD_MASK_ALT));
 
     if (keymap_config.swap_lctl_lgui) {
-        oled_write_ln_P(PSTR(" C "), (modifiers & MOD_MASK_CTRL));
+        oled_write_P(PSTR("C"), (modifiers & MOD_MASK_CTRL));
     } else {
-        oled_write_ln_P(PSTR(" G "), (modifiers & MOD_MASK_GUI));
+        oled_write_P(PSTR("G"), (modifiers & MOD_MASK_GUI));
     }
-
+    oled_write_ln_P(PSTR(""), false);
     oled_write_ln_P(PSTR(""), false);
 
     oled_write_ln_P(host_keyboard_led_state().caps_lock
