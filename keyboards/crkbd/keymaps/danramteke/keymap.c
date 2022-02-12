@@ -214,7 +214,7 @@ void print_status_primary(void) {
             oled_write_ln_P(PSTR("Colmk"), false);
 
                 switch (get_highest_layer(layer_state)) {
-                    case _QWERTY:
+                    case _COLMK:
                         oled_write_ln_P(PSTR("Base "), false);
                         break;
                     case _RAISE:
@@ -310,6 +310,39 @@ void print_status_primary(void) {
     } else {
         oled_write_P(PSTR("Win"), true);
     }
+
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR(""), false);
+
+
+// ---- layer grid
+    uint8_t layer = get_highest_layer(default_layer_state);
+
+
+    layer == _GAME1
+    ? oled_write_P(PSTR("1"), false)
+    : oled_write_P(PSTR("."), false);
+
+    layer == _QWERTY
+    ? oled_write_P(PSTR("Q"), false)
+    : oled_write_P(PSTR("."), false);
+
+    layer == _MIRYOKU_COLEMAK
+    ? oled_write_P(PSTR("M"), false)
+    : oled_write_P(PSTR("."), false);
+    oled_write_ln_P(PSTR(".."), false);
+
+    layer == _GAME2
+    ? oled_write_P(PSTR("2"), false)
+    : oled_write_P(PSTR("."), false);
+    oled_write_P(PSTR("."), false);
+    layer == _COLMK
+    ? oled_write_P(PSTR("C"), false)
+    : oled_write_P(PSTR("."), false);
+    oled_write_ln_P(PSTR(".."), false);
+
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -372,6 +405,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             layer_move(_GAME2);
             return false;
 
+        case U_COLMK:
+            set_single_persistent_default_layer(_COLMK);
+            layer_move(_COLMK);
+            return false;
 
         case U_LOWER:
             if (record->event.pressed) {
