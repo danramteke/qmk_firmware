@@ -308,7 +308,7 @@ void print_status_primary(void) {
     if (keymap_config.swap_lctl_lgui) {
         oled_write_P(PSTR("Mac"), false);
     } else {
-        oled_write_P(PSTR("Win"), false);
+        oled_write_P(PSTR("Win"), true);
     }
 }
 
