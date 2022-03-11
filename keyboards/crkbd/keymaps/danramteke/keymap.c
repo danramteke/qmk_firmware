@@ -47,9 +47,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   LT(_MIRYOKU_BRACKETS, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB),             LT(_MIRYOKU_SYM, KC_ENT),   LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL)
   ),
   [_MIRYOKU_NUM] = LAYOUT(
-    _______, KC_LBRC, KC_1,    KC_2,    KC_3,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______,
-    XXXXXXX, KC_GRV,  KC_7,    KC_8,    KC_9,    KC_BSLS,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
+    XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
                                       KC_DOT,       KC_0, KC_MINS, XXXXXXX, XXXXXXX, XXXXXXX
   ),
 
@@ -61,16 +61,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_MIRYOKU_SYM] = LAYOUT(
-    _______, KC_LCBR, KC_EXLM, KC_AT,   KC_HASH, KC_RCBR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, KC_COLN, KC_DLR,  KC_PERC, KC_CIRC, KC_PLUS,                   XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______,
-    XXXXXXX, KC_TILD, KC_AMPR, KC_ASTR, KC_LPRN, KC_PIPE,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
+    XXXXXXX, KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_PIPE,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
                                         KC_LPRN, KC_RPRN, KC_UNDS, XXXXXXX, XXXXXXX, XXXXXXX
   ),
 
   [_MIRYOKU_FUN] = LAYOUT(
-    _______, KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_PSCR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK,                   XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______,
-    XXXXXXX, KC_F10,  KC_F7,   KC_F8,   KC_F9,   KC_PAUS,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
+    XXXXXXX, KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS,                   XXXXXXX, XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, _______,
                                         KC_APP,  KC_CAPS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
   ),
   [_MIRYOKU_MEDIA] = LAYOUT(
@@ -124,9 +124,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_LOWER] = LAYOUT(
-        KC_0, KC_LBRC,  KC_1,    KC_2,    KC_3,  KC_RBRC,                   KC_AGIN,KC_PASTE, KC_COPY,  KC_CUT, KC_UNDO, _______,
+        KC_0, KC_LBRC,  KC_7,    KC_8,    KC_9,  KC_RBRC,                   KC_AGIN,KC_PASTE, KC_COPY,  KC_CUT, KC_UNDO, _______,
       KC_DOT, KC_SCLN,  KC_4,    KC_5,    KC_6,   KC_EQL,                   KC_PGUP, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______,
-     KC_MINS,  KC_GRV,  KC_7,    KC_8,    KC_9,  KC_BSLS,                   KC_PGDN, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND, _______,
+     KC_MINS,  KC_GRV,  KC_1,    KC_2,    KC_3,  KC_BSLS,                   KC_PGDN, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND, _______,
                                        _______,  _______, _______, _______, _______, _______
   ),
 
