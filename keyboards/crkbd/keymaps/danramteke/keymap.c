@@ -119,7 +119,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_COLMK] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_F,    KC_P,     KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_MUTE,
       KC_TAB,   KC_A,   KC_R,    KC_S,    KC_T,     KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O,  KC_VOLU,
-      KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_D,     KC_V,                      KC_H,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
+      KC_SPC,   KC_Z,   KC_X,    KC_C,    KC_D,     KC_V,                      KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
                                       KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE, KC_LGUI,  KC_ENT
   ),
 
@@ -363,12 +363,13 @@ void oled_render_logo(void) {
     oled_write_P(crkbd_logo, false);
 }
 
-void oled_task_user(void) {
+bool oled_task_user(void) {
     if (is_keyboard_left()) {
         print_status_primary();
     } else {
         oled_render_logo();
     }
+    return true;
 }
 
 #endif
