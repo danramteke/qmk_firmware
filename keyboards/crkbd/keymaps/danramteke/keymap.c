@@ -238,26 +238,6 @@ void print_status_primary(void) {
     oled_write_ln_P(PSTR(""), false);
     oled_write_ln_P(PSTR(""), false);
 
-
-// ---- layer grid
-    uint8_t layer = get_highest_layer(default_layer_state);
-
-
-    oled_write_P(PSTR("."), false);
-    oled_write_P(PSTR("."), false);
-
-    layer == _MIRYOKU_COLEMAK
-    ? oled_write_P(PSTR("M"), false)
-    : oled_write_P(PSTR("."), false);
-    oled_write_ln_P(PSTR(".."), false);
-
-    oled_write_P(PSTR("."), false);
-    oled_write_P(PSTR("."), false);
-    layer == _COLMK
-    ? oled_write_P(PSTR("C"), false)
-    : oled_write_P(PSTR("."), false);
-    oled_write_ln_P(PSTR(".."), false);
-
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
