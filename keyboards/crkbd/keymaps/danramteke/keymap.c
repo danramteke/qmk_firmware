@@ -23,6 +23,16 @@ enum custom_keycodes {
     U_MIRYO,
     U_COLMK,
 
+//     U_LGUIA,
+//     U_LALTR,
+//     U_LCTLS,
+//     U_LSFTT,
+//
+//     U_RSFTN,
+//     U_RCTLE,
+//     U_RALTI,
+//     U_RGUIO,
+
     U_PRVWD,
     U_NXTWD,
     U_LSTRT,
