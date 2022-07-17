@@ -9,8 +9,6 @@ enum danramteke_layers {
       _MIRYOKU_MEDIA,
       _MIRYOKU_MOUSE,
 
-    _GAME1,
-    _GAME2,
     _QWERTY,
     _COLMK,
 
@@ -25,8 +23,6 @@ enum custom_keycodes {
     U_RAISE,
 
     U_MIRYO,
-    U_GAME1,
-    U_GAME2,
     U_QWERTY,
     U_COLMK,
 
@@ -101,20 +97,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
   ),
 
-  [_GAME1] = LAYOUT( \
-      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
-      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
-     KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
-                                        KC_ESC,   KC_SPC, U_LOWER, U_RAISE,    KC_0,  KC_ENT
-  ),
-
-  [_GAME2] = LAYOUT( \
-      KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
-      KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
-     KC_LSFT,   KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,                      KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
-                                        KC_ESC,     KC_0, U_LOWER, U_RAISE,  KC_SPC,  KC_ENT
-  ),
-
   [_QWERTY] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
       KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                      KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_VOLU,
@@ -145,8 +127,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_ADJUST] = LAYOUT(
     XXXXXXX, CG_SWAP, CG_NORM, CG_TOGG, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    XXXXXXX, U_GAME1,U_QWERTY, U_MIRYO, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    XXXXXXX, U_GAME2, XXXXXXX, U_COLMK, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX,U_QWERTY, U_MIRYO, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, U_COLMK, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                         _______, _______, _______, _______, _______, _______
   )
 };
@@ -234,48 +216,6 @@ void print_status_primary(void) {
                         break;
                 }
             break;
-        case _GAME1:
-            oled_write_ln_P(PSTR("Game1"), false);
-
-                switch (get_highest_layer(layer_state)) {
-                    case _GAME1:
-                        oled_write_ln_P(PSTR("Base "), false);
-                        break;
-                    case _RAISE:
-                        oled_write_ln_P(PSTR("Raise"), false);
-                        break;
-                    case _LOWER:
-                        oled_write_ln_P(PSTR("Lower"), false);
-                        break;
-                    case _ADJUST:
-                        oled_write_ln_P(PSTR("Adjst"), false);
-                        break;
-                    default:
-                        oled_write_ln_P(PSTR("? ? ?"), false);
-                        break;
-                }
-            break;
-        case _GAME2:
-            oled_write_ln_P(PSTR("Game2"), false);
-
-                switch (get_highest_layer(layer_state)) {
-                    case _GAME2:
-                        oled_write_ln_P(PSTR("Base "), false);
-                        break;
-                    case _RAISE:
-                        oled_write_ln_P(PSTR("Raise"), false);
-                        break;
-                    case _LOWER:
-                        oled_write_ln_P(PSTR("Lower"), false);
-                        break;
-                    case _ADJUST:
-                        oled_write_ln_P(PSTR("Adjst"), false);
-                        break;
-                    default:
-                        oled_write_ln_P(PSTR("? ? ?"), false);
-                        break;
-                }
-            break;
         default:
             oled_write_ln_P(PSTR(" ?  ?  ?"), true);
             oled_write_ln_P(PSTR(""), false);
@@ -324,9 +264,7 @@ void print_status_primary(void) {
     uint8_t layer = get_highest_layer(default_layer_state);
 
 
-    layer == _GAME1
-    ? oled_write_P(PSTR("1"), false)
-    : oled_write_P(PSTR("."), false);
+    oled_write_P(PSTR("."), false);
 
     layer == _QWERTY
     ? oled_write_P(PSTR("Q"), false)
@@ -337,9 +275,7 @@ void print_status_primary(void) {
     : oled_write_P(PSTR("."), false);
     oled_write_ln_P(PSTR(".."), false);
 
-    layer == _GAME2
-    ? oled_write_P(PSTR("2"), false)
-    : oled_write_P(PSTR("."), false);
+    oled_write_P(PSTR("."), false);
     oled_write_P(PSTR("."), false);
     layer == _COLMK
     ? oled_write_P(PSTR("C"), false)
@@ -396,16 +332,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case U_QWERTY:
             set_single_persistent_default_layer(_QWERTY);
             layer_move(_QWERTY);
-            return false;
-
-        case U_GAME1:
-            set_single_persistent_default_layer(_GAME1);
-            layer_move(_GAME1);
-            return false;
-
-        case U_GAME2:
-            set_single_persistent_default_layer(_GAME2);
-            layer_move(_GAME2);
             return false;
 
         case U_COLMK:

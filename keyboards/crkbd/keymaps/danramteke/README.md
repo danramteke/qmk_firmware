@@ -1,7 +1,8 @@
 # The `danramteke` Layout
 
-This layout offers Miryoku with two additional Qwerty setups for gaming. It is
-based on Miryoku, the default Sofle layout, and other tricks.
+This layout offers Miryoku with a plain Colmak setup when Tap-holds are
+undesirable (e.g. gaming). It is based on Miryoku, the default Sofle layout,
+and a few other tricks.
 
     make crkbd:danramteke && make crkbd:danramteke:dfu
 
@@ -20,7 +21,7 @@ sublayer. It also displays the current OS mode: "Mac" or "Win"
 
 ## Volume
 
-The "touch bar" on MacBook Pros taught me that I vales quick volume access.
+The "touch bar" on MacBook Pros taught me that I value quick volume access.
 Therefore, the far-right column on each layer is for volume control. To easily
 quiet loud noises, mute is on the top row and volume-down is on the bottom row.
 Volume-up usually isn't an emergency button compared to the other two, and is
