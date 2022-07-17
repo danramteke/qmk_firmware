@@ -10,11 +10,10 @@ enum danramteke_layers {
       _MIRYOKU_MOUSE,
 
     _COLMK,
-
       _LOWER,
       _RAISE,
-    _ADJUST,
 
+    _ADJUST,
 };
 
 enum custom_keycodes {
