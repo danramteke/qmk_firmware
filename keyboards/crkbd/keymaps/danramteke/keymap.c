@@ -8,7 +8,6 @@ enum danramteke_layers {
       _MIRYOKU_FUN,
       _MIRYOKU_MEDIA,
       _MIRYOKU_MOUSE,
-      _MIRYOKU_BRACKETS,
 
     _GAME1,
     _GAME2,
@@ -39,7 +38,7 @@ enum custom_keycodes {
 };
 
 #define MO_ADJ MO(_ADJUST)
-#define MO_MMED MO(_MIRYOKU_MEDIA)
+
 
 #define LGUI_A LGUI_T(KC_A)
 #define LALT_R LALT_T(KC_R)
@@ -58,8 +57,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_MIRYOKU_COLEMAK] = LAYOUT(\
      MO_ADJ,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_MUTE, \
     XXXXXXX,  LGUI_A,  LALT_R,  LCTL_S,   LSFTT,    KC_G,                      KC_M,  RSFT_N,  RCTL_E,  RALT_I,  RGUI_O, KC_VOLU, \
-    MO_MMED,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                      KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_VOLD, \
-    LT(_MIRYOKU_BRACKETS, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB), LT(_MIRYOKU_SYM, KC_ENT), LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL)
+    XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                      KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_VOLD, \
+    LT(_MIRYOKU_MEDIA, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB), LT(_MIRYOKU_SYM, KC_ENT), LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL)
   ),
   [_MIRYOKU_NUM] = LAYOUT(
     _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
@@ -101,14 +100,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, XXXXXXX, KC_ACL0,                   XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
                                         XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
   ),
-
-  [_MIRYOKU_BRACKETS] = LAYOUT(
-    _______, XXXXXXX, KC_LBRC, XXXXXXX, KC_RBRC, XXXXXXX,                   XXXXXXX, KC_LBRC, XXXXXXX, KC_RBRC, XXXXXXX, _______,
-    XXXXXXX, KC_LCBR, KC_LPRN, XXXXXXX, KC_RPRN, KC_RCBR,                   KC_LCBR, KC_LPRN, XXXXXXX, KC_RPRN, KC_RCBR, _______,
-    XXXXXXX, XXXXXXX, KC_LABK, XXXXXXX, KC_RABK, XXXXXXX,                   XXXXXXX, KC_LABK, XXXXXXX, KC_RABK, XXXXXXX, _______,
-                                        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-  ),
-
 
   [_GAME1] = LAYOUT( \
       KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_MUTE,
@@ -195,9 +186,6 @@ void print_status_primary(void) {
                     break;
                 case _MIRYOKU_MOUSE:
                     oled_write_ln_P(PSTR("Mouse"), false);
-                    break;
-                case _MIRYOKU_BRACKETS:
-                    oled_write_ln_P(PSTR("Brkts"), false);
                     break;
                 default:
                     oled_write_ln_P(PSTR("? ? ?"), false);
