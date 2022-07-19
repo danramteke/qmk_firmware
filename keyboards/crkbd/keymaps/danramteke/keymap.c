@@ -151,7 +151,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_ADJUST] = LAYOUT(
     XXXXXXX, CG_SWAP, CG_NORM, CG_TOGG, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    XXXXXXX, XXXXXXX, XXXXXXX, U_MIRYO, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, U_MIRYO, U_1SHOT, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, XXXXXXX, XXXXXXX, U_COLMK, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                         _______, _______, _______, _______, _______, _______
   ),
@@ -164,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
   [_1SHOT_ACT] = LAYOUT(\
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   U_LSTRT, U_PRVWD,   KC_UP, U_NXTWD, U_LEND, _______,
-    XXXXXXX, OS_CMD, OS_ALT, OS_CTRL, OS_SHFT, XXXXXXX,                   KC_BSPC, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL, _______,
+    XXXXXXX,  OS_CMD, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                     KC_BSPC, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL, _______,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, U_LSTRT, XXXXXXX, U_LEND, XXXXXXX, _______,
                                         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT,  KC_ESC
   ),
@@ -244,10 +244,10 @@ void print_status_primary(void) {
                   oled_write_ln_P(PSTR("Base "), false);
                   break;
               case _1SHOT_ACT:
-                  oled_write_ln_P(PSTR("Act"), false);
+                  oled_write_ln_P(PSTR("Act  "), false);
                   break;
               case _1SHOT_SYM:
-                  oled_write_ln_P(PSTR("Sym"), false);
+                  oled_write_ln_P(PSTR("Sym  "), false);
                   break;
               case _ADJUST:
                   oled_write_ln_P(PSTR("Adjst"), false);
