@@ -4,13 +4,13 @@
 oneshot_state os_shft_state = os_up_unqueued;
 oneshot_state os_ctrl_state = os_up_unqueued;
 oneshot_state os_alt_state = os_up_unqueued;
-oneshot_state os_cmd_state = os_up_unqueued;
+oneshot_state os_gui_state = os_up_unqueued;
 
 void reset_1shot(void) {
     os_shft_state = os_up_unqueued;
     os_ctrl_state = os_up_unqueued;
     os_alt_state = os_up_unqueued;
-    os_cmd_state = os_up_unqueued;
+    os_gui_state = os_up_unqueued;
 }
 
 
@@ -45,7 +45,7 @@ enum custom_keycodes {
     OS_SHFT,
     OS_CTRL,
     OS_ALT,
-    OS_CMD,
+    OS_GUI,
 
 //     U_LGUIA,
 //     U_LALTR,
@@ -164,13 +164,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
   [_1SHOT_ACT] = LAYOUT(\
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   U_LSTRT, U_PRVWD,   KC_UP, U_NXTWD, U_LEND, _______,
-    XXXXXXX,  OS_CMD, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                     KC_BSPC, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL, _______,
+    XXXXXXX,  OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                     KC_BSPC, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL, _______,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, U_LSTRT, XXXXXXX, U_LEND, XXXXXXX, _______,
                                         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT,  KC_ESC
   ),
   [_1SHOT_SYM] = LAYOUT(\
     _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, OS_SHFT, OS_CTRL,  OS_ALT,  OS_CMD, _______,
+    XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, OS_SHFT, OS_CTRL,  OS_ALT,  OS_GUI, _______,
     XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                      KC_MINS,       KC_0, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
     ),
@@ -289,11 +289,10 @@ void print_status_primary(void) {
     : PSTR("abc"), host_keyboard_led_state().caps_lock);
 
     oled_write_ln_P(PSTR(""), false);
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_P(PSTR("Mac"), false);
-    } else {
-        oled_write_P(PSTR("Win"), true);
-    }
+    oled_write_ln_P(keymap_config.swap_lctl_lgui
+    ? PSTR("Mac")
+    : PSTR("Win"), !keymap_config.swap_lctl_lgui);
+
 
     oled_write_ln_P(PSTR(""), false);
     oled_write_ln_P(PSTR(""), false);
@@ -347,7 +346,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             keycode, record
         );
         update_oneshot(
-            &os_ctrl_state, KC_LCTL, OS_CTRL,
+            &os_ctrl_state, KC_LCTL, keymap_config.swap_lctl_lgui ? OS_GUI : OS_CTRL,
             keycode, record
         );
         update_oneshot(
@@ -355,7 +354,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             keycode, record
         );
         update_oneshot(
-            &os_cmd_state, KC_LCMD, OS_CMD,
+            &os_gui_state, KC_LGUI, keymap_config.swap_lctl_lgui ? OS_CTRL : OS_GUI,
             keycode, record
         );
     }
@@ -550,7 +549,7 @@ bool is_oneshot_ignored_key(uint16_t keycode) {
     case OS_SHFT:
     case OS_CTRL:
     case OS_ALT:
-    case OS_CMD:
+    case OS_GUI:
         return true;
     default:
         return false;
