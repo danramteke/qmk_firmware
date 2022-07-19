@@ -1,6 +1,20 @@
 #include QMK_KEYBOARD_H
+#include "one_shot.h"
 
-enum danramteke_layers {
+oneshot_state os_shft_state = os_up_unqueued;
+oneshot_state os_ctrl_state = os_up_unqueued;
+oneshot_state os_alt_state = os_up_unqueued;
+oneshot_state os_cmd_state = os_up_unqueued;
+
+void reset_1shot(void) {
+    os_shft_state = os_up_unqueued;
+    os_ctrl_state = os_up_unqueued;
+    os_alt_state = os_up_unqueued;
+    os_cmd_state = os_up_unqueued;
+}
+
+
+enum custom_layers {
     _MIRYOKU_COLEMAK = 0,
       _MIRYOKU_NAV,
       _MIRYOKU_NUM,
@@ -13,6 +27,10 @@ enum danramteke_layers {
       _LOWER,
       _RAISE,
 
+    _1SHOT,
+      _1SHOT_ACT,
+      _1SHOT_SYM,
+
     _ADJUST,
 };
 
@@ -22,6 +40,12 @@ enum custom_keycodes {
 
     U_MIRYO,
     U_COLMK,
+    U_1SHOT,
+
+    OS_SHFT,
+    OS_CTRL,
+    OS_ALT,
+    OS_CMD,
 
 //     U_LGUIA,
 //     U_LALTR,
@@ -130,9 +154,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX, XXXXXXX, XXXXXXX, U_MIRYO, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, XXXXXXX, XXXXXXX, U_COLMK, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                         _______, _______, _______, _______, _______, _______
-  )
-};
+  ),
 
+  [_1SHOT] = LAYOUT( \
+      MO_ADJ,   KC_Q,   KC_W,    KC_F,    KC_P,     KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_MUTE,
+    KC_PASTE,   KC_A,   KC_R,    KC_S,    KC_T,     KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O,  KC_VOLU,
+     KC_COPY,   KC_Z,   KC_X,    KC_C,    KC_D,     KC_V,                      KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
+                                MO(_1SHOT_ACT),  KC_LSFT, XXXXXXX, XXXXXXX,  KC_SPC,  MO(_1SHOT_SYM)
+    ),
+  [_1SHOT_ACT] = LAYOUT(\
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   U_LSTRT, U_PRVWD,   KC_UP, U_NXTWD, U_LEND, _______,
+    XXXXXXX, OS_CMD, OS_ALT, OS_CTRL, OS_SHFT, XXXXXXX,                   KC_BSPC, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, U_LSTRT, XXXXXXX, U_LEND, XXXXXXX, _______,
+                                        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT,  KC_ESC
+  ),
+  [_1SHOT_SYM] = LAYOUT(\
+    _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, OS_SHFT, OS_CTRL,  OS_ALT,  OS_CMD, _______,
+    XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                                     KC_MINS,       KC_0, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+    ),
+};
 
 
 #ifdef OLED_ENABLE
@@ -195,6 +237,26 @@ void print_status_primary(void) {
                         break;
                 }
             break;
+        case _1SHOT:
+          oled_write_ln_P(PSTR("1Shot"), false);
+          switch (get_highest_layer(layer_state)) {
+              case _1SHOT:
+                  oled_write_ln_P(PSTR("Base "), false);
+                  break;
+              case _1SHOT_ACT:
+                  oled_write_ln_P(PSTR("Act"), false);
+                  break;
+              case _1SHOT_SYM:
+                  oled_write_ln_P(PSTR("Sym"), false);
+                  break;
+              case _ADJUST:
+                  oled_write_ln_P(PSTR("Adjst"), false);
+                  break;
+              default:
+                  oled_write_ln_P(PSTR("? ? ?"), false);
+                  break;
+          }
+          break;
         default:
             oled_write_ln_P(PSTR(" ?  ?  ?"), true);
             oled_write_ln_P(PSTR(""), false);
@@ -277,17 +339,45 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 }
 
 
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (get_highest_layer(default_layer_state) == _1SHOT) {
+        update_oneshot(
+            &os_shft_state, KC_LSFT, OS_SHFT,
+            keycode, record
+        );
+        update_oneshot(
+            &os_ctrl_state, KC_LCTL, OS_CTRL,
+            keycode, record
+        );
+        update_oneshot(
+            &os_alt_state, KC_LALT, OS_ALT,
+            keycode, record
+        );
+        update_oneshot(
+            &os_cmd_state, KC_LCMD, OS_CMD,
+            keycode, record
+        );
+    }
+
     switch (keycode) {
 
         case U_MIRYO:
             set_single_persistent_default_layer(_MIRYOKU_COLEMAK);
             layer_move(_MIRYOKU_COLEMAK);
+            reset_1shot();
             return false;
 
         case U_COLMK:
             set_single_persistent_default_layer(_COLMK);
             layer_move(_COLMK);
+            reset_1shot();
+            return false;
+
+        case U_1SHOT:
+            set_single_persistent_default_layer(_1SHOT);
+            layer_move(_1SHOT);
+            reset_1shot();
             return false;
 
         case U_LOWER:
@@ -440,4 +530,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
     return true;
+}
+
+bool is_oneshot_cancel_key(uint16_t keycode) {
+    switch (keycode) {
+    case MO(_1SHOT_SYM):
+    case MO(_1SHOT_ACT):
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool is_oneshot_ignored_key(uint16_t keycode) {
+    switch (keycode) {
+    case MO(_1SHOT_SYM):
+    case MO(_1SHOT_ACT):
+    case KC_LSFT:
+    case OS_SHFT:
+    case OS_CTRL:
+    case OS_ALT:
+    case OS_CMD:
+        return true;
+    default:
+        return false;
+    }
 }
