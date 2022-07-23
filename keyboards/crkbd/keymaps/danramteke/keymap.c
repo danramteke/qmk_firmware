@@ -66,8 +66,6 @@ enum custom_keycodes {
 
 #define MO_ADJ MO(_ADJUST)
 
-#define GTAB LCTL(KC_TAB)
-#define GSTAB LCTL(LSFT(KC_TAB))
 
 #define LGUI_A LGUI_T(KC_A)
 #define LALT_R LALT_T(KC_R)
@@ -171,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_1SHOT_ACT] = LAYOUT(\
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
     XXXXXXX,  OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                   XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
-    XXXXXXX, XXXXXXX, XXXXXXX,   GSTAB,    GTAB,  KC_TAB,                   XXXXXXX, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND,  KC_MPRV,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND,  KC_MPRV,
                                         XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, XXXXXXX, KC_TAB
   ),
 
@@ -267,22 +265,22 @@ void print_status_primary(void) {
 
     uint8_t modifiers = get_mods();
 
-    oled_write_P(PSTR("S"), (modifiers & MOD_MASK_SHIFT));
+    oled_write_ln_P(PSTR("S"), (modifiers & MOD_MASK_SHIFT));
 
     if (keymap_config.swap_lctl_lgui) {
-        oled_write_P(PSTR("G"), (modifiers & MOD_MASK_GUI));
+        oled_write_ln_P(PSTR(" G"), (modifiers & MOD_MASK_GUI));
     } else {
-        oled_write_P(PSTR("C"), (modifiers & MOD_MASK_CTRL));
+        oled_write_ln_P(PSTR(" C"), (modifiers & MOD_MASK_CTRL));
     }
 
-    oled_write_P(PSTR("A"), (modifiers & MOD_MASK_ALT));
+    oled_write_ln_P(PSTR("  A"), (modifiers & MOD_MASK_ALT));
 
     if (keymap_config.swap_lctl_lgui) {
-        oled_write_P(PSTR("C"), (modifiers & MOD_MASK_CTRL));
+        oled_write_ln_P(PSTR("   C"), (modifiers & MOD_MASK_CTRL));
     } else {
-        oled_write_P(PSTR("G"), (modifiers & MOD_MASK_GUI));
+        oled_write_ln_P(PSTR("   G"), (modifiers & MOD_MASK_GUI));
     }
-    oled_write_ln_P(PSTR(""), false);
+
     oled_write_ln_P(PSTR(""), false);
 
     oled_write_ln_P(host_keyboard_led_state().caps_lock
