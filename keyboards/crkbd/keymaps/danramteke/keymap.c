@@ -47,16 +47,6 @@ enum custom_keycodes {
     OS_ALT,
     OS_GUI,
 
-//     U_LGUIA,
-//     U_LALTR,
-//     U_LCTLS,
-//     U_LSFTT,
-//
-//     U_RSFTN,
-//     U_RCTLE,
-//     U_RALTI,
-//     U_RGUIO,
-
     U_PRVWD,
     U_NXTWD,
     U_LSTRT,
@@ -65,7 +55,6 @@ enum custom_keycodes {
 };
 
 #define MO_ADJ MO(_ADJUST)
-
 
 #define LGUI_A LGUI_T(KC_A)
 #define LALT_R LALT_T(KC_R)
