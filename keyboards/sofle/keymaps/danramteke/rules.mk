@@ -4,3 +4,6 @@ ENCODER_ENABLE = yes
 CONSOLE_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
+OLED_ENABLE  = yes
+
+SRC += one_shot.c

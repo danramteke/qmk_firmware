@@ -1,27 +1,55 @@
 #include QMK_KEYBOARD_H
+#include "one_shot.h"
+
 #undef TAPPING_TERM
 #define TAPPING_TERM 200
-#define U_NP KC_NO // key is not present
-#define U_NA KC_NO // present but not available for use
-#define U_NU KC_NO // available but not used
 
-enum sofle_layers {
+
+enum custom_layers {
     _MIRYOKU_COLEMAK = 0,
-    _MIRYOKU_NAV,
-    _MIRYOKU_NUM,
-    _MIRYOKU_SYM,
-    _MIRYOKU_FUN,
-    _MIRYOKU_MEDIA,
-    _MIRYOKU_MOUSE,
-    _QWERTY,
-    _LOWER,
-    _RAISE,
+      _MIRYOKU_NAV,
+      _MIRYOKU_NUM,
+      _MIRYOKU_SYM,
+      _MIRYOKU_FUN,
+      _MIRYOKU_MEDIA,
+      _MIRYOKU_MOUSE,
+
+    _COLMK,
+      _LOWER,
+      _RAISE,
+
+    _1SHOT,
+      _1SHOT_ACT,
+      _1SHOT_SYM,
+
+    _ADJUST,
 };
+
+oneshot_state os_shft_state = os_up_unqueued;
+oneshot_state os_ctrl_state = os_up_unqueued;
+oneshot_state os_alt_state = os_up_unqueued;
+oneshot_state os_gui_state = os_up_unqueued;
+
+void reset_1shot(void) {
+    os_shft_state = os_up_unqueued;
+    os_ctrl_state = os_up_unqueued;
+    os_alt_state = os_up_unqueued;
+    os_gui_state = os_up_unqueued;
+}
 
 enum custom_keycodes {
     U_LOWER = SAFE_RANGE,
-
     U_RAISE,
+
+    U_MIRYO,
+    U_COLMK,
+    U_1SHOT,
+
+    OS_SHFT,
+    OS_CTRL,
+    OS_ALT,
+    OS_GUI,
+
     U_PRVWD,
     U_NXTWD,
     U_LSTRT,
@@ -29,87 +57,257 @@ enum custom_keycodes {
     U_DLINE
 };
 
+#define MO_ADJ MO(_ADJUST)
+
+#define LGUI_A LGUI_T(KC_A)
+#define LALT_R LALT_T(KC_R)
+#define LCTL_S LCTL_T(KC_S)
+#define LSFTT LSFT_T(KC_T)
+
+#define RSFT_N RSFT_T(KC_N)
+#define RCTL_E RCTL_T(KC_E)
+#define RALT_I RALT_T(KC_I)
+#define RGUI_O RGUI_T(KC_O)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_MIRYOKU_COLEMAK] = LAYOUT(\
-    XXXXXXX, XXXXXXX,      XXXXXXX,       XXXXXXX,           XXXXXXX,           XXXXXXX,                              XXXXXXX,           XXXXXXX,           XXXXXXX,           XXXXXXX,           XXXXXXX,       XXXXXXX,
-    XXXXXXX, KC_Q,         KC_W,          KC_F,              KC_P,              KC_B,                                 KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,       XXXXXXX,
-    XXXXXXX, LGUI_T(KC_A), LALT_T(KC_R),  LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,                                 KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),  XXXXXXX,
-    XXXXXXX, KC_Z,         ALGR_T(KC_X),  KC_C,              KC_D,              KC_V,   XXXXXXX,          KC_MUTE,    KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,       XXXXXXX,
-    U_NP, U_NP, LT(_MIRYOKU_MEDIA, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB),      LT(_MIRYOKU_SYM, KC_ENT),   LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL), U_NP, U_NP
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, KC_MNXT,
+     MO_ADJ,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_MUTE, \
+   KC_PASTE,  LGUI_A,  LALT_R,  LCTL_S,   LSFTT,    KC_G,                      KC_M,  RSFT_N,  RCTL_E,  RALT_I,  RGUI_O, KC_VOLU, \
+    KC_COPY,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, XXXXXXX, XXXXXXX,    KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_VOLD, \
+   XXXXXXX, XXXXXXX, LT(_MIRYOKU_MEDIA, KC_ESC), LT(_MIRYOKU_NAV, KC_SPC), LT(_MIRYOKU_MOUSE, KC_TAB), LT(_MIRYOKU_SYM, KC_ENT), LT(_MIRYOKU_NUM, KC_BSPC), LT(_MIRYOKU_FUN, KC_DEL), XXXXXXX, XXXXXXX
+  ),
+
+  [_MIRYOKU_NUM] = LAYOUT(\
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, _______,
+    XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                 XXXXXXX,   XXXXXXX,  KC_DOT,       KC_0, KC_MINS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
   ),
 
   [_MIRYOKU_NAV] = LAYOUT(\
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                     KC_AGIN, KC_PASTE,KC_COPY,  KC_CUT, KC_UNDO, XXXXXXX, \
-    XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                     KC_PGUP, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, \
-    XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   KC_MUTE, KC_PGDN, U_LSTRT, U_PRVWD, U_NXTWD, U_LEND, XXXXXXX,  \
-                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_ENT, KC_BSPC,  KC_DEL, XXXXXXX, XXXXXXX \
-  ),
-
-  [_MIRYOKU_NUM] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-    XXXXXXX, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,    KC_EQL,                    U_NA,    KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, XXXXXXX,
-    XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS, XXXXXXX, KC_MUTE, U_NA,    U_NA,    U_NA,    KC_ALGR, U_NA,    XXXXXXX,
-                      U_NP,    U_NP,    KC_DOT,  KC_0,    KC_MINS, U_NA,    U_NA,    U_NA,    U_NP,    U_NP
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, KC_MPRV,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                    KC_SPC, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______, \
+    XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                   KC_PGUP, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______, \
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PGDN, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND, _______,  \
+                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, KC_BSPC,  KC_DEL, XXXXXXX, XXXXXXX
   ),
 
   [_MIRYOKU_SYM] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-    XXXXXXX, KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,                   U_NA,    U_NA,    U_NA,    U_NA,    RESET,   XXXXXXX,
-    XXXXXXX, KC_COLN, KC_DLR,  KC_PERC, KC_CIRC, KC_PLUS,                   U_NA,    KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, XXXXXXX,
-    XXXXXXX, KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_PIPE, XXXXXXX, KC_MUTE, U_NA,    U_NA,    U_NA,    KC_ALGR, U_NA,    XXXXXXX,
-                      U_NP,    U_NP,    KC_LPRN, KC_RPRN, KC_UNDS, U_NA,    U_NA,    U_NA,    U_NP,    U_NP
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    _______, KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, KC_COLN, KC_DLR,  KC_PERC, KC_CIRC, KC_PLUS,                   XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, _______,
+    XXXXXXX, KC_TILD, KC_EXLM,   KC_AT, KC_HASH, KC_PIPE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                      XXXXXXX, XXXXXXX, KC_LPRN, KC_RPRN, KC_UNDS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
   ),
 
   [_MIRYOKU_FUN] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-    XXXXXXX, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,                   U_NA,    U_NA,    U_NA,    U_NA,    RESET,   XXXXXXX,
-    XXXXXXX, KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK,                   U_NA,    KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, XXXXXXX,
-    XXXXXXX, KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS, XXXXXXX, KC_MUTE, U_NA,    U_NA,    U_NA,    KC_ALGR, U_NA,    XXXXXXX,
-                      U_NP,    U_NP,    KC_APP,  KC_SPC,  KC_TAB,  U_NA,    U_NA,    U_NA,    U_NP,    U_NP
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    _______, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK,                   XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, _______,
+    XXXXXXX, KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                      XXXXXXX, XXXXXXX, KC_APP,  KC_CAPS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
   ),
-
   [_MIRYOKU_MEDIA] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-    XXXXXXX,    U_NA,    U_NA,    U_NA,    U_NA,    U_NA,                      RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX,
-    XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,                      U_NU,    KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, XXXXXXX,
-    XXXXXXX, U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    XXXXXXX, KC_MUTE, U_NU,       U_NU,    U_NU,    U_NU,    U_NU, XXXXXXX,
-                      U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_MSTP, KC_MPLY, KC_MUTE,    U_NP,    U_NP
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                   XXXXXXX, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MSTP, KC_MPLY, KC_MUTE, XXXXXXX, XXXXXXX
   ),
 
   [_MIRYOKU_MOUSE] = LAYOUT(
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-    XXXXXXX,    U_NA,    U_NA,    U_NA,    U_NA, KC_ACL2,                   KC_AGIN, KC_PASTE,KC_COPY,  KC_CUT, KC_UNDO, XXXXXXX,
-    XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_ACL1,                      U_NU, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX,
-    XXXXXXX, U_NA,    KC_ALGR,   KC_NO,   KC_NO, KC_ACL0, XXXXXXX, KC_MUTE,    U_NU, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, XXXXXXX,
-                         U_NP,    U_NP,    U_NA,    U_NA,    U_NA, KC_BTN1, KC_BTN3, KC_BTN2,    U_NP,    U_NP
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2,                   KC_AGIN, KC_PASTE,KC_COPY,  KC_CUT, KC_UNDO, _______,
+    XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_ACL1,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
+    XXXXXXX, XXXXXXX, KC_ALGR, XXXXXXX, XXXXXXX, KC_ACL0, XXXXXXX, XXXXXXX, XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
+                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX
   ),
 
+  [_COLMK] = LAYOUT( \
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1,  KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, KC_MNXT,
+      KC_ESC,   KC_Q,    KC_W,    KC_F,    KC_P,     KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_MUTE,
+      KC_TAB,   KC_A,    KC_R,    KC_S,    KC_T,     KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O, KC_VOLU,
+     KC_LGUI,   KC_Z,    KC_X,    KC_C,    KC_D,     KC_V, XXXXXXX, XXXXXXX,    KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_VOLD,
+                      KC_LGUI, KC_LALT,KC_LCTRL,  KC_LSFT, U_LOWER, U_RAISE,  KC_SPC,  KC_ENT, XXXXXXX, XXXXXXX
+  ),
 
-[_QWERTY] = LAYOUT( \
-  KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,     KC_5,                            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,  KC_GRV, \
-  KC_ESC,   KC_Q,   KC_W,    KC_E,    KC_R,     KC_T,                            KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,  KC_BSPC, \
-  KC_TAB,   KC_A,   KC_S,    KC_D,    KC_F,     KC_G,                            KC_H,     KC_J,    KC_K,    KC_L, KC_SCLN,  KC_QUOT, \
-  KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,     KC_B,    XXXXXXX,   KC_MUTE,     KC_N,     KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_RSFT, \
-                    KC_LGUI, KC_LALT, KC_LCTRL, KC_LSFT, KC_SPC,     KC_ENT,   KC_SPC,  U_RAISE, KC_BSPACE, KC_DEL \
-),
+  [_LOWER] = LAYOUT(
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+        KC_0, KC_LBRC,  KC_7,    KC_8,    KC_9,  KC_RBRC,                   KC_AGIN,KC_PASTE, KC_COPY,  KC_CUT, KC_UNDO, _______,
+      KC_DOT, KC_SCLN,  KC_4,    KC_5,    KC_6,   KC_EQL,                   KC_PGUP, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______,
+     KC_MINS,  KC_GRV,  KC_1,    KC_2,    KC_3,  KC_BSLS, XXXXXXX, XXXXXXX,  KC_PGDN, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND, _______,
+                     XXXXXXX, XXXXXXX,  _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX
+  ),
 
   [_RAISE] = LAYOUT(
-    _______, XXXXXXX,  KC_0,   KC_DOT, KC_MINS,  XXXXXXX,                     XXXXXXX,  XXXXXXX, XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX,\
-    _______, KC_LBRC,  KC_7,     KC_8,    KC_9,  KC_RBRC,                     KC_PGUP,  U_PRVWD,   KC_UP,  U_NXTWD,  U_DLINE, _______,
-    _______, KC_SCLN,  KC_4,     KC_5,    KC_6,   KC_EQL,                     KC_PGDN,  KC_LEFT, KC_DOWN,  KC_RGHT,   KC_DEL, XXXXXXX,
-    _______, KC_GRV,   KC_1,     KC_2,    KC_3,  KC_BSLS, XXXXXXX,   KC_MUTE,    U_NA,  U_LSTRT, XXXXXXX,   U_LEND,  XXXXXXX, _______,
-                    _______,  _______, _______,  _______, _______,   _______,  _______, _______, _______,  _______
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                    KC_ESC,  KC_ENT,  KC_TAB, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BSPC,  KC_SPC,  KC_DEL, XXXXXXX, XXXXXXX, _______,
+                      XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX
+  ),
+
+  [_ADJUST] = LAYOUT(
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, CG_SWAP, CG_NORM, CG_TOGG, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, U_MIRYO, U_1SHOT, XXXXXXX,                   XXXXXXX, XXXXXXX, KC_CAPS, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, U_COLMK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                      XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX
+  ),
+
+  [_1SHOT] = LAYOUT( \
+     XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+      MO_ADJ,   KC_Q,   KC_W,    KC_F,    KC_P,     KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_MUTE,
+    KC_PASTE,   KC_A,   KC_R,    KC_S,    KC_T,     KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O,  KC_VOLU,
+     KC_COPY,   KC_Z,   KC_X,    KC_C,    KC_D,     KC_V,  XXXXXXX, XXXXXXX,   KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
+              XXXXXXX, XXXXXXX, KC_ESC, MO(_1SHOT_ACT),       KC_SPC, KC_BSPC,  MO(_1SHOT_SYM), KC_DEL, XXXXXXX, XXXXXXX
+    ),
+  [_1SHOT_SYM] = LAYOUT(\
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, OS_SHFT, OS_CTRL,  OS_ALT,  OS_GUI, _______,
+    XXXXXXX,  KC_GRV, KC_1,    KC_2,    KC_3,    KC_BSLS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                   XXXXXXX, XXXXXXX,  KC_DOT,       KC_0, KC_MINS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+    ),
+  [_1SHOT_ACT] = LAYOUT(\
+    XXXXXXX, XXXXXXX, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0,                   KC_BTN1, KC_BTN3, KC_BTN2, XXXXXXX, XXXXXXX, _______,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
+    XXXXXXX,  OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                   XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND,  KC_MPRV,
+                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, XXXXXXX, KC_TAB, XXXXXXX, XXXXXXX
   ),
 
 };
-//KC_UNDO,   KC_CUT,  KC_COPY, KC_PASTE
 
 
 #ifdef OLED_DRIVER_ENABLE
+
+
+void print_status_primary(void) {
+    // Print current mode
+
+    switch (get_highest_layer(default_layer_state)) {
+        case _MIRYOKU_COLEMAK:
+            oled_write_ln_P(PSTR("Mryku"), false);
+
+            switch (get_highest_layer(layer_state)) {
+                case _MIRYOKU_COLEMAK:
+                    oled_write_ln_P(PSTR("Base "), false);
+                    break;
+                case _ADJUST:
+                    oled_write_ln_P(PSTR("Adjst"), false);
+                    break;
+                case _MIRYOKU_FUN:
+                    oled_write_ln_P(PSTR("Fun  "), false);
+                    break;
+                case _MIRYOKU_NUM:
+                    oled_write_ln_P(PSTR("Num  "), false);
+                    break;
+                case _MIRYOKU_SYM:
+                    oled_write_ln_P(PSTR("Sym  "), false);
+                    break;
+                case _MIRYOKU_NAV:
+                    oled_write_ln_P(PSTR("Nav  "), false);
+                    break;
+                case _MIRYOKU_MEDIA:
+                    oled_write_ln_P(PSTR("Media"), false);
+                    break;
+                case _MIRYOKU_MOUSE:
+                    oled_write_ln_P(PSTR("Mouse"), false);
+                    break;
+                default:
+                    oled_write_ln_P(PSTR("? ? ?"), false);
+                    break;
+            }
+            break;
+        case _COLMK:
+            oled_write_ln_P(PSTR("Colmk"), false);
+
+                switch (get_highest_layer(layer_state)) {
+                    case _COLMK:
+                        oled_write_ln_P(PSTR("Base "), false);
+                        break;
+                    case _RAISE:
+                        oled_write_ln_P(PSTR("Raise"), false);
+                        break;
+                    case _LOWER:
+                        oled_write_ln_P(PSTR("Lower"), false);
+                        break;
+                    case _ADJUST:
+                        oled_write_ln_P(PSTR("Adjst"), false);
+                        break;
+                    default:
+                        oled_write_ln_P(PSTR("? ? ?"), false);
+                        break;
+                }
+            break;
+        case _1SHOT:
+          oled_write_ln_P(PSTR("1Shot"), false);
+          switch (get_highest_layer(layer_state)) {
+              case _1SHOT:
+                  oled_write_ln_P(PSTR("Base "), false);
+                  break;
+              case _1SHOT_ACT:
+                  oled_write_ln_P(PSTR("Act  "), false);
+                  break;
+              case _1SHOT_SYM:
+                  oled_write_ln_P(PSTR("Sym  "), false);
+                  break;
+              case _ADJUST:
+                  oled_write_ln_P(PSTR("Adjst"), false);
+                  break;
+              default:
+                  oled_write_ln_P(PSTR("? ? ?"), false);
+                  break;
+          }
+          break;
+        default:
+            oled_write_ln_P(PSTR(" ?  ?  ?"), true);
+            oled_write_ln_P(PSTR(""), false);
+            break;
+    }
+
+
+    uint8_t modifiers = get_mods();
+
+    oled_write_ln_P(PSTR("S"), (modifiers & MOD_MASK_SHIFT));
+
+    if (keymap_config.swap_lctl_lgui) {
+        oled_write_ln_P(PSTR(" G"), (modifiers & MOD_MASK_GUI));
+    } else {
+        oled_write_ln_P(PSTR(" C"), (modifiers & MOD_MASK_CTRL));
+    }
+
+    oled_write_ln_P(PSTR("  A"), (modifiers & MOD_MASK_ALT));
+
+    if (keymap_config.swap_lctl_lgui) {
+        oled_write_ln_P(PSTR("   C"), (modifiers & MOD_MASK_CTRL));
+    } else {
+        oled_write_ln_P(PSTR("   G"), (modifiers & MOD_MASK_GUI));
+    }
+
+    oled_write_ln_P(PSTR(""), false);
+
+    oled_write_ln_P(host_keyboard_led_state().caps_lock
+    ? PSTR("ABC")
+    : PSTR("abc"), host_keyboard_led_state().caps_lock);
+
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(keymap_config.swap_lctl_lgui
+    ? PSTR("Mac")
+    : PSTR("Win"), !keymap_config.swap_lctl_lgui);
+
+
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR(""), false);
+
+}
 
 static void render_logo(void) {
     static const char PROGMEM qmk_logo[] = {
@@ -121,68 +319,6 @@ static void render_logo(void) {
     oled_write_P(qmk_logo, false);
 }
 
-static void print_status_narrow(void) {
-    // Print current mode
-    oled_write_P(PSTR("\n\n"), false);
-    oled_write_ln_P(PSTR("MODE"), false);
-    switch (get_highest_layer(default_layer_state)) {
-        case _QWERTY:
-            oled_write_ln_P(PSTR("Qwrt"), false);
-            break;
-        case _MIRYOKU_COLEMAK:
-            oled_write_ln_P(PSTR("Mir"), false);
-            break;
-        default:
-            oled_write_ln_P(PSTR("???"), false);
-    }
-    oled_write_P(PSTR("\n\n"), false);
-    // Print current layer
-    oled_write_ln_P(PSTR("LAYR"), false);
-    switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
-        case _MIRYOKU_COLEMAK:
-            oled_write_ln_P(PSTR("Base"), false);
-            break;
-        case _RAISE:
-            oled_write_ln_P(PSTR("Rais"), false);
-            break;
-        case _LOWER:
-            oled_write_ln_P(PSTR("Lowe"), false);
-            break;
-        case _MIRYOKU_FUN:
-            oled_write_ln_P(PSTR("Func"), false);
-            break;
-        case _MIRYOKU_NUM:
-            oled_write_ln_P(PSTR("Num"), false);
-            break;
-        case _MIRYOKU_SYM:
-            oled_write_ln_P(PSTR("Sym"), false);
-            break;
-        case _MIRYOKU_NAV:
-            oled_write_ln_P(PSTR("Nav"), false);
-            break;
-        case _MIRYOKU_MEDIA:
-            oled_write_ln_P(PSTR("Mdia"), false);
-            break;
-        case _MIRYOKU_MOUSE:
-            oled_write_ln_P(PSTR("Mous"), false);
-            break;
-        default:
-            oled_write_ln_P(PSTR("???"), false);
-    }
-    // oled_write_P(PSTR("\n\n"), false);
-    // led_t led_usb_state = host_keyboard_led_state();
-    // oled_write_ln_P(PSTR("Cap?"), led_usb_state.caps_lock);
-
-    oled_write_P(PSTR("\n\n"), false);
-    oled_write_ln_P(PSTR("OS"), false);
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_ln_P(PSTR("Mac"), false);
-    } else {
-        oled_write_ln_P(PSTR("Win"), false);
-    }
-}
-
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_master()) {
         return OLED_ROTATION_270;
@@ -191,13 +327,12 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 }
 
 void oled_task_user(void) {
-    if (is_keyboard_master()) {
-        print_status_narrow();
+    if (is_keyboard_left()) {
+        print_status_primary();
     } else {
         render_logo();
     }
 }
-
 #endif
 
 #ifdef ENCODER_ENABLE
@@ -205,30 +340,15 @@ void oled_task_user(void) {
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 1) {
         if (!clockwise) { //clockwise was wired backwards
-            tap_code(KC_VOLU);
+            tap_code(KC_MS_L);
         } else {
-            tap_code(KC_VOLD);
+            tap_code(KC_MS_R);
         }
     } else if (index == 0) {
         if (!clockwise) { //clockwise was wired backwards
-            switch (get_highest_layer(layer_state)) {
-                case _QWERTY:
-                    set_single_persistent_default_layer(_MIRYOKU_COLEMAK);
-                    layer_move(_MIRYOKU_COLEMAK);
-                    break;
-                case _MIRYOKU_COLEMAK:
-                    set_single_persistent_default_layer(_QWERTY);
-                    layer_move(_QWERTY);
-                    break;
-                default:
-                    set_single_persistent_default_layer(_MIRYOKU_COLEMAK);
-                    layer_move(_MIRYOKU_COLEMAK);
-                    break;
-            }
+            tap_code(KC_MS_U);
         } else {
-            //MAGIC_TOGGLE_CTL_GUI
-            keymap_config.swap_lctl_lgui = !keymap_config.swap_lctl_lgui;
-            keymap_config.swap_rctl_rgui = keymap_config.swap_lctl_lgui;
+            tap_code(KC_MS_D);
         }
     }
     return true;
@@ -237,28 +357,70 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 #endif
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {
-    keymap_config.swap_lctl_lgui = !keymap_config.swap_lctl_lgui;
-    keymap_config.swap_rctl_rgui = keymap_config.swap_lctl_lgui;
+    keymap_config.swap_lctl_lgui = true;
+    keymap_config.swap_rctl_rgui = true;
     return state;
 }
 
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (get_highest_layer(default_layer_state) == _1SHOT) {
+        update_oneshot(
+            &os_shft_state, KC_LSFT, OS_SHFT,
+            keycode, record
+        );
+        update_oneshot(
+            &os_ctrl_state, KC_LCTL, keymap_config.swap_lctl_lgui ? OS_GUI : OS_CTRL,
+            keycode, record
+        );
+        update_oneshot(
+            &os_alt_state, KC_LALT, OS_ALT,
+            keycode, record
+        );
+        update_oneshot(
+            &os_gui_state, KC_LGUI, keymap_config.swap_lctl_lgui ? OS_CTRL : OS_GUI,
+            keycode, record
+        );
+    }
+
     switch (keycode) {
+
+        case U_MIRYO:
+            set_single_persistent_default_layer(_MIRYOKU_COLEMAK);
+            layer_move(_MIRYOKU_COLEMAK);
+            reset_1shot();
+            return false;
+
+        case U_COLMK:
+            set_single_persistent_default_layer(_COLMK);
+            layer_move(_COLMK);
+            reset_1shot();
+            return false;
+
+        case U_1SHOT:
+            set_single_persistent_default_layer(_1SHOT);
+            layer_move(_1SHOT);
+            reset_1shot();
+            return false;
+
         case U_LOWER:
             if (record->event.pressed) {
                 layer_on(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             } else {
                 layer_off(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             }
             return false;
         case U_RAISE:
             if (record->event.pressed) {
                 layer_on(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             } else {
                 layer_off(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             }
             return false;
+
         case U_PRVWD:
             if (record->event.pressed) {
                 if (keymap_config.swap_lctl_lgui) {
@@ -390,4 +552,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
     return true;
+}
+
+bool is_oneshot_cancel_key(uint16_t keycode) {
+    switch (keycode) {
+    case MO(_1SHOT_SYM):
+    case MO(_1SHOT_ACT):
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool is_oneshot_ignored_key(uint16_t keycode) {
+    switch (keycode) {
+    case MO(_1SHOT_SYM):
+    case MO(_1SHOT_ACT):
+    case KC_LSFT:
+    case OS_SHFT:
+    case OS_CTRL:
+    case OS_ALT:
+    case OS_GUI:
+        return true;
+    default:
+        return false;
+    }
 }
