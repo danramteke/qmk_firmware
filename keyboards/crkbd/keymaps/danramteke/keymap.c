@@ -147,8 +147,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       MO_ADJ,   KC_Q,   KC_W,    KC_F,    KC_P,     KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_MUTE,
     KC_PASTE,   KC_A,   KC_R,    KC_S,    KC_T,     KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O,  KC_VOLU,
      KC_COPY,   KC_Z,   KC_X,    KC_C,    KC_D,     KC_V,                      KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
-                              KC_ESC, MO(_1SHOT_ACT),       KC_SPC, KC_BSPC,  MO(_1SHOT_SYM), KC_DEL
+                               KC_ESC, MO(_1SHOT_ACT), KC_SPC,      KC_SPC,  MO(_1SHOT_SYM), KC_TAB
     ),
+
   [_1SHOT_SYM] = LAYOUT(\
     _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,     KC_EQL,                   XXXXXXX, OS_SHFT, OS_CTRL,  OS_ALT,  OS_GUI, _______,
@@ -157,9 +158,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
   [_1SHOT_ACT] = LAYOUT(\
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
-    XXXXXXX,  OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                   XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND,  KC_MPRV,
-                                        XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, XXXXXXX, KC_TAB
+    XXXXXXX,  OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                   KC_DEL, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_BSPC, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND,  KC_MPRV,
+                                        XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, XXXXXXX, XXXXXXX
   ),
 
 };
