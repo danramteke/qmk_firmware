@@ -30,6 +30,7 @@ enum custom_layers {
     _1SHOT,
       _1SHOT_ACT,
       _1SHOT_SYM,
+      _1SHOT_FUN,
 
     _ADJUST,
 };
@@ -51,7 +52,9 @@ enum custom_keycodes {
     U_NXTWD,
     U_LSTRT,
     U_LEND,
-    U_DLINE
+    U_DLINE,
+
+    U_RPT
 };
 
 #define MO_ADJ MO(_ADJUST)
@@ -147,7 +150,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       MO_ADJ,   KC_Q,   KC_W,    KC_F,    KC_P,     KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_MUTE,
     KC_PASTE,   KC_A,   KC_R,    KC_S,    KC_T,     KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O,  KC_VOLU,
      KC_COPY,   KC_Z,   KC_X,    KC_C,    KC_D,     KC_V,                      KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_VOLD,
-                               KC_ESC, MO(_1SHOT_ACT), KC_SPC,      KC_SPC,  MO(_1SHOT_SYM), KC_TAB
+                               KC_ESC, MO(_1SHOT_ACT), KC_TAB,      KC_SPC,  MO(_1SHOT_SYM), MO(_1SHOT_FUN)
     ),
   [_1SHOT_SYM] = LAYOUT(\
     _______, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
@@ -156,12 +159,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       KC_DOT,       KC_0, KC_MINS, XXXXXXX, XXXXXXX, XXXXXXX
     ),
   [_1SHOT_ACT] = LAYOUT(\
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_DEL, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
-    XXXXXXX,  OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT, XXXXXXX,                   KC_BSPC, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                    KC_DEL, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
+    XXXXXXX,  OS_GUI,  OS_ALT, OS_CTRL, OS_SHFT, KC_CAPS,                   KC_BSPC, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND,  KC_MPRV,
-                                        XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, XXXXXXX, XXXXXXX
+                                        XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, XXXXXXX, U_RPT
   ),
 
+  [_1SHOT_FUN] = LAYOUT(
+      _______, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      XXXXXXX, KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK,                   XXXXXXX, OS_SHFT, OS_CTRL,  OS_ALT,  OS_GUI, _______,
+      XXXXXXX, KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                                          KC_APP,  KC_CAPS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+    ),
 };
 
 
@@ -236,6 +245,9 @@ void print_status_primary(void) {
                   break;
               case _1SHOT_SYM:
                   oled_write_ln_P(PSTR("Sym  "), false);
+                  break;
+                case _1SHOT_FUN:
+                  oled_write_ln_P(PSTR("Fun  "), false);
                   break;
               case _ADJUST:
                   oled_write_ln_P(PSTR("Adjst"), false);
