@@ -159,10 +159,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       KC_DOT,       KC_0, KC_MINS, XXXXXXX, XXXXXXX, XXXXXXX
     ),
   [_1SHOT_ACT] = LAYOUT(\
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                    KC_DEL, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
-    XXXXXXX,  OS_GUI,  OS_ALT, OS_CTRL, OS_SHFT, KC_CAPS,                   KC_BSPC, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
+    XXXXXXX,  OS_GUI,  OS_ALT, OS_CTRL, OS_SHFT, KC_CAPS,                   XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_MNXT,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, U_LSTRT, U_PRVWD, U_NXTWD,  U_LEND,  KC_MPRV,
-                                        XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, XXXXXXX, U_RPT
+                                        XXXXXXX, XXXXXXX, XXXXXXX,  KC_ENT, KC_BSPC, KC_DEL
   ),
 
   [_1SHOT_FUN] = LAYOUT(
